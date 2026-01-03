@@ -5,129 +5,139 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jack Whooley</title>
     <style>
-        /* Reset and base styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background-color: #f8f9fa;
+            background-color: #ffffff;
             color: #333;
             line-height: 1.6;
-        }
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        container {
-            max-width: 800px;
+            max-width: 700px;
             margin: 0 auto;
             padding: 40px 20px;
         }
+        
         header {
-            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #000;
+        }
+        
+        nav {
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        nav a {
+            color: #333;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 0.95rem;
+        }
+        
+        nav a:hover {
+            text-decoration: underline;
+        }
+        
+        nav span {
+            color: #999;
+            margin: 0 5px;
+        }
+        
+        main {
             margin-bottom: 60px;
         }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            color: #222;
-        }
-        .tagline {
-            font-size: 1.5rem;
-            color: #555;
+        
+        p {
             margin-bottom: 20px;
+            font-size: 1rem;
+            color: #333;
         }
-        .bio {
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto 40px;
-            color: #444;
+        
+        a {
+            color: #0066cc;
+            text-decoration: none;
         }
-        section {
-            margin-bottom: 80px;
+        
+        a:hover {
+            text-decoration: underline;
         }
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 30px;
-            text-align: center;
-            color: #222;
+        
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 40px 0;
         }
-        ul {
-            list-style: none;
+        
+        .social-links {
+            margin-top: 30px;
+            font-size: 0.95rem;
         }
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+        
+        .social-links a {
+            margin-right: 15px;
         }
-        .project {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .project h3 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-        }
-        .project p {
-            color: #666;
-            margin-bottom: 15px;
-        }
+        
         footer {
-            text-align: center;
-            padding: 40px 0;
-            color: #777;
+            margin-top: 80px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
             font-size: 0.9rem;
+            color: #666;
         }
-        .links {
-            margin: 30px 0;
+        
+        footer a {
+            color: #666;
         }
-        .links a {
-            margin: 0 15px;
-            font-size: 1.1rem;
-        }
+        
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
+            body {
+                padding: 30px 15px;
             }
-            .tagline {
-                font-size: 1.3rem;
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            nav a {
+                display: inline-block;
+                margin-bottom: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Jack Whooley</h1>
-            <p class="tagline">Software Developer / Engineer / Creator</p>
-            <p class="bio">
-                Hi, I'm Jack
-            </p>
-            <div class="links">
-                <a href="https://github.com/jackwhooley-stack" target="_blank">GitHub</a>
-
-            </div>
-        </header>
-
-        <section id="about">
-            <h2>About</h2>
-            <p style="max-width: 700px; margin: 0 auto; text-align: center;">
-                I specialize in financial and economic modelling for energy and infrastructure projects. I study mathematics on MathAcademy.com. 
-                
-            </p>
-        </section>
-
-        <footer>
-            © 2026 Jack Whooley. All rights reserved.
-        </footer>
-    </div>
+    <header>
+        <h1>Jack Whooley</h1>
+        <nav>
+            <a href="#home">home</a>
+            <span>·</span>
+            <a href="#about">about</a>
+            <span>·</span>
+            <a href="https://github.com/jackwhooley-stack" target="_blank">github</a>
+        </nav>
+    </header>
+    
+    <main>
+        <p>Hi, I'm Jack. I spend most of my time working on economic models and thinking about how to improve infrastructure planning and energy systems.</p>
+        
+        <div class="social-links">
+            <a href="https://github.com/jackwhooley-stack" target="_blank">GitHub</a>
+        </div>
+    </main>
+    
+    <footer>
+        <a href="mailto:[email protected]">[email protected]</a>
+    </footer>
 </body>
 </html>
