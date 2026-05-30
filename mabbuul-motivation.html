@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects - Jack Whooley</title>
+    <title>Mabbuul Motivation - Jack Whooley</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: #ffffff;
@@ -20,111 +20,83 @@
             margin: 0 auto;
             padding: 40px 20px;
         }
-        
+
         header {
             margin-bottom: 40px;
         }
-        
+
         h1 {
             font-size: 1.8rem;
             font-weight: 600;
             margin-bottom: 25px;
             color: #000;
         }
-        
+
         h1 a {
             color: #000;
             text-decoration: none;
         }
-        
+
         h1 a:hover {
             text-decoration: none;
         }
-        
+
         nav {
             margin-bottom: 35px;
             padding-bottom: 20px;
             border-bottom: 1px solid #e0e0e0;
         }
-        
+
         nav a {
             color: #333;
             text-decoration: none;
             margin-right: 15px;
             font-size: 0.95rem;
         }
-        
+
         nav a:hover {
             text-decoration: underline;
         }
-        
+
         nav span {
             color: #999;
             margin: 0 5px;
         }
-        
+
         main {
             margin-bottom: 60px;
         }
-        
+
         h2 {
             font-size: 1.5rem;
             margin-bottom: 30px;
             font-weight: 600;
             color: #000;
         }
-        
+
         p {
             margin-bottom: 20px;
             font-size: 1rem;
             color: #333;
         }
-        
-        .project {
-            margin-top: 10px;
-        }
-        
-        .project h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #000;
-            margin-bottom: 10px;
-        }
-        
-        .project p {
-            margin-bottom: 0;
+
+        ol {
+            margin: 0 0 20px 24px;
         }
 
-        .project-link {
-            margin-top: 10px;
+        li {
+            margin-bottom: 16px;
         }
 
-        .project-stack {
-            list-style: none;
-            margin: 12px 0 0;
-            padding: 0;
-            color: #888;
-        }
-
-        .project-stack li {
-            margin-bottom: 6px;
-        }
-
-        .project-stack li::before {
-            content: "✓";
-            color: #999;
-            margin-right: 8px;
-        }
-        
         a {
             color: #0066cc;
             text-decoration: none;
         }
-        
+
         a:hover {
             text-decoration: underline;
         }
-        
+
         footer {
             margin-top: 80px;
             padding-top: 20px;
@@ -132,20 +104,20 @@
             font-size: 0.9rem;
             color: #666;
         }
-        
+
         footer a {
             color: #666;
         }
-        
+
         @media (max-width: 768px) {
             body {
                 padding: 30px 15px;
             }
-            
+
             h1 {
                 font-size: 1.5rem;
             }
-            
+
             nav a {
                 display: inline-block;
                 margin-bottom: 10px;
@@ -170,24 +142,24 @@
             <a href="https://github.com/jackwhooley-stack" target="_blank">github</a>
         </nav>
     </header>
-    
+
     <main>
-        <h2>Projects</h2>
-        
-        <div class="project">
-            <h3>Mabbuul</h3>
-            <p>I am building <a href="https://mabbuul.com" target="_blank">Mabbuul.com</a>, the most efficient way to master vocabulary in a foreign language.</p>
-            <p class="project-link"><a href="mabbuul-motivation.html">mabbuul motivation</a></p>
-            <ul class="project-stack">
-                <li>Vercel (front end)</li>
-                <li>Supabase (back end)</li>
-                <li>Google Cloud (translate API)</li>
-                <li>Stripe (payments)</li>
-                <li>Antigravity (coding agent)</li>
-            </ul>
-        </div>
+        <h2>Mabbuul motivation</h2>
+
+        <p>I am building Mabbuul to try and fill the gap between textbooks and LingQ.</p>
+
+        <p>LingQ is a language learning platform created by Steve Kaufmann, a Canadian former diplomat and polyglot. The vision for LingQ is a practical implementation of <a href="https://en.wikipedia.org/wiki/Stephen_Krashen" target="_blank">Stephen Krashen's theories of language acquisition</a>. In short, LingQ emphasises massive, comprehensible input and deemphasises studying grammar and flashcard drills.</p>
+
+        <p>I have a tonne of respect for Steve, but the issues with using the LingQ approach for me from day one were:</p>
+
+        <ol>
+            <li><strong>Lack of feeling of progression:</strong> After the initial buzz fades of learning my first 100 words in a language, I felt lost in LingQ's sea of unstructured content. Learning a language is a very long journey - it can take up to <a href="https://www.fsi-language-courses.org/blog/fsi-language-difficulty/" target="_blank">2200 hours to master a language like Arabic or Mandarin</a>. Personally, I need tangible, short and medium term milestones to keep me on track for such a long journey.</li>
+            <li><strong>Inefficient:</strong> Steve often says that he avoids flashcards simply because he does not enjoy them, and if he is constantly forcing himself to do something he does not enjoy, that will interfere with his long term commitment to a language. That is a totally fair position in my opinion. I feel differently, and I am willing to accept a bit more grinding for more efficient vocabulary acquisition.</li>
+        </ol>
+
+        <p>Mabbuul guides users through a curated series of stories that cover all the vocabulary that students are expected to know for a <a href="https://cvc.cervantes.es/ensenanza/biblioteca_ele/plan_curricular/niveles/09_nociones_especificas_inventario_a1-a2.htm" target="_blank">CEFR level</a>. After a student finishes a story, all of the words from that story are added to a flashcard deck that must be maintained before a student can access other stories. So, a student experiences the vocabulary initially in context, but is then required to recall the vocabulary from that story at an optimal delay. After a student completes a level on Mabbuul, they can be confident that they have mastered the vocabulary they need for a professionally recognised exam. They will need to supplement Mabbuul with some output practice (speaking, writing), but this should come fairly quickly to them.</p>
     </main>
-    
+
     <footer>
         © 2026 Jack Whooley. All rights reserved.
     </footer>
