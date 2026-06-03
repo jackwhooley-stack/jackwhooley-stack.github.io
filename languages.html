@@ -86,7 +86,7 @@
         }
         
         .step {
-            min-height: 85vh; /* More height to make scrolling natural */
+            min-height: 85vh; /* Natural scrolling distance */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -158,7 +158,9 @@
         
         .sphere-bg {
             fill: #ffffff;
-            stroke: none; /* No outer outline */
+            stroke: #cccccc; /* Subtle spherical outline boundary */
+            stroke-width: 0.8px;
+            transition: r 0.1s ease;
         }
         
         .graticule {
@@ -174,12 +176,12 @@
             stroke-width: 0.6px;
             stroke-linejoin: round;
             stroke-linecap: round;
-            filter: url(#sketch-filter); /* Wobbly hand-drawn line filter */
+            filter: url(#sketch-filter); /* Wobbly pencil sketch lines */
             transition: fill 0.6s ease, stroke 0.6s ease;
         }
         
         .country.active {
-            fill: url(#hatch-pattern); /* Diagonal one-way line shading */
+            fill: url(#hatch-pattern); /* Hatch line shading */
             stroke: #000000;
             stroke-width: 1.2px;
         }
@@ -187,6 +189,7 @@
         .globe-shading {
             fill: url(#globe-shadow);
             pointer-events: none;
+            transition: r 0.1s ease;
         }
         
         footer {
@@ -313,11 +316,12 @@
                                 <line x1="0" y1="0" x2="0" y2="6" stroke="#444444" stroke-width="0.6" />
                             </pattern>
 
-                            <!-- Radial shading gradient for 3D sphere depth -->
-                            <radialGradient id="globe-shadow" cx="40%" cy="40%" r="60%">
+                            <!-- Volumetric radial shading gradient for 3D spherical depth -->
+                            <radialGradient id="globe-shadow" cx="30%" cy="30%" r="70%">
                                 <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
-                                <stop offset="65%" stop-color="#e0e0e0" stop-opacity="0.2" />
-                                <stop offset="100%" stop-color="#999999" stop-opacity="0.45" />
+                                <stop offset="50%" stop-color="#d0d0d0" stop-opacity="0.1" />
+                                <stop offset="85%" stop-color="#888888" stop-opacity="0.35" />
+                                <stop offset="100%" stop-color="#555555" stop-opacity="0.65" />
                             </radialGradient>
                         </defs>
                     </svg>
@@ -339,7 +343,7 @@
                 id: 0,
                 name: "Languages Intro",
                 targetCoords: [174, -41], // New Zealand
-                scale: 170, // Increased from 120 so it is not too small to begin with
+                scale: 180, // Generous initial scale so it is clearly visible
                 activeCountryId: null
             },
             {
@@ -368,7 +372,6 @@
         let currentCoords = [...states[0].targetCoords];
         let currentScale = states[0].scale;
         let activeIndex = 0;
-        let currentTransition = null;
 
         // D3 Elements Setup
         const svg = d3.select("#globe-svg");
@@ -387,11 +390,11 @@
         const clippedGroup = svg.append("g")
             .attr("clip-path", "url(#globe-clip)");
 
-        // 1. Globe base sphere/ocean (inside clipped group)
-        clippedGroup.append("path")
-            .datum({type: "Sphere"})
-            .attr("class", "sphere-bg")
-            .attr("d", pathGenerator);
+        // 1. Globe base sphere/ocean (drawn as a circle so the outline is a perfect sphere)
+        clippedGroup.append("circle")
+            .attr("cx", width / 2)
+            .attr("cy", height / 2)
+            .attr("class", "sphere-bg");
 
         // 2. Graticule lines (inside clipped group)
         const graticule = d3.geoGraticule()();
@@ -403,11 +406,11 @@
         // 3. Country paths group (inside clipped group)
         const countriesGroup = clippedGroup.append("g").attr("class", "countries-group");
 
-        // 4. Shadow overlay for 3D sphere look (inside clipped group)
-        clippedGroup.append("path")
-            .datum({type: "Sphere"})
-            .attr("class", "globe-shading")
-            .attr("d", pathGenerator);
+        // 4. Shadow overlay for 3D sphere look (drawn as a circle matching the visible globe size)
+        clippedGroup.append("circle")
+            .attr("cx", width / 2)
+            .attr("cy", height / 2)
+            .attr("class", "globe-shading");
 
         let countriesFeatures = [];
 
@@ -461,9 +464,8 @@
                 return;
             }
 
-            if (currentTransition) {
-                currentTransition.stop();
-            }
+            // Cleanly interrupt and stop any active transitions on the SVG element
+            svg.interrupt();
 
             // Great-circle interpolation for smooth rotation path
             const interpolateCoords = d3.geoInterpolate(startCoords, targetCoords);
@@ -472,7 +474,7 @@
             const minScale = Math.min(startScale, targetScale);
             const baseDipScale = Math.min(130, minScale * 0.75);
 
-            currentTransition = d3.transition()
+            svg.transition()
                 .duration(1600)
                 .ease(d3.easeCubicInOut)
                 .tween("globe", () => {
@@ -498,10 +500,16 @@
 
         // Redraw all path structures
         function renderAll() {
-            svg.selectAll("path.sphere-bg").attr("d", pathGenerator);
+            // Determine active visible radius based on current scale (capped to clip-path size)
+            const visibleRadius = Math.min(200, currentScale);
+            
+            // Scale background circle and shading circle to match the sphere
+            svg.select("circle.sphere-bg").attr("r", visibleRadius);
+            svg.select("circle.globe-shading").attr("r", visibleRadius);
+            
+            // Redraw paths
             svg.selectAll("path.graticule").attr("d", pathGenerator);
             svg.selectAll(".country").attr("d", pathGenerator);
-            svg.selectAll("path.globe-shading").attr("d", pathGenerator);
         }
 
         // Proximity-to-center scroll tracking with boundary forces
