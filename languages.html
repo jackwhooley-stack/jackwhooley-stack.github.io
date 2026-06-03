@@ -75,13 +75,14 @@
         .languages-container {
             display: flex;
             position: relative;
-            gap: 60px;
+            gap: 80px; /* Increased gap spacing */
             align-items: flex-start;
         }
         
         .narrative {
             flex: 1;
             min-width: 0; /* Prevents text overflow */
+            padding-right: 50px; /* Push the right margin of the text further left */
             padding-bottom: 25vh; /* Provides scroll runway for bottom elements */
         }
         
@@ -106,7 +107,7 @@
         }
         
         .step h2 {
-            font-size: 2.2rem;
+            font-size: 2.6rem; /* Increased size */
             margin-bottom: 25px;
             font-weight: 600;
             color: #000;
@@ -114,7 +115,7 @@
         
         .step p {
             margin-bottom: 20px;
-            font-size: 1.05rem;
+            font-size: 1.2rem; /* Increased size */
             color: #444;
             line-height: 1.7;
         }
@@ -124,7 +125,7 @@
             font-family: 'Traditional Arabic', 'Arabic Typesetting', 'Geeza Pro', 'Simplified Arabic', serif;
             direction: rtl;
             text-align: right;
-            font-size: 1.4rem;
+            font-size: 1.6rem; /* Increased size */
             line-height: 2;
             margin-top: 15px;
             border-right: 3px solid #e0e0e0;
@@ -133,7 +134,7 @@
         
         /* Fixed-width column for the visualizer to prevent overlapping */
         .visualizer {
-            width: 320px;
+            width: 380px; /* Increased size */
             position: -webkit-sticky;
             position: sticky;
             top: 60px;
@@ -145,8 +146,8 @@
         }
         
         .globe-wrapper {
-            width: 300px;
-            height: 300px;
+            width: 360px; /* Increased size */
+            height: 360px; /* Increased size */
             position: relative;
         }
         
@@ -272,12 +273,10 @@
             <div class="narrative">
                 <section class="step" data-step="0">
                     <h2>languages</h2>
-                    <p>I enjoy learning languages as a window into different cultures, histories, and ways of thinking. This map tracks my linguistic journey, highlighting countries where these languages are spoken.</p>
-                    <p>Scroll down to see the languages I have been exploring.</p>
                 </section>
                 
                 <section class="step" data-step="1">
-                    <h2>Espanol</h2>
+                    <h2>Español</h2>
                     <p>[I will fill what the text body says later]</p>
                 </section>
                 
@@ -301,7 +300,7 @@
                         <defs>
                             <!-- Fixed circle clip path to prevent the globe from expanding/spilling outward and covering text -->
                             <clipPath id="globe-clip">
-                                <circle cx="250" cy="250" r="200" />
+                                <circle cx="250" cy="250" r="225" />
                             </clipPath>
 
                             <!-- Displacement map filter for wobbly, sketchy outlines -->
@@ -343,28 +342,28 @@
                 id: 0,
                 name: "Languages Intro",
                 targetCoords: [174, -41], // New Zealand
-                scale: 180, // Generous initial scale so it is clearly visible
+                scale: 200, // Generous initial scale
                 activeCountryId: null
             },
             {
                 id: 1,
-                name: "Espanol",
+                name: "Español",
                 targetCoords: [-73, 4.5], // Colombia
-                scale: 450,
+                scale: 500,
                 activeCountryId: 170 // Colombia (ISO 170)
             },
             {
                 id: 2,
                 name: "عربي",
                 targetCoords: [30, 26], // Egypt
-                scale: 450,
+                scale: 500,
                 activeCountryId: 818 // Egypt (ISO 818)
             },
             {
                 id: 3,
                 name: "中文",
                 targetCoords: [121, 23.5], // Taiwan
-                scale: 850, // Taiwan is small, so zoom in extra close
+                scale: 950, // Taiwan is small, so zoom in extra close
                 activeCountryId: 158 // Taiwan (ISO 158)
             }
         ];
@@ -501,7 +500,7 @@
         // Redraw all path structures
         function renderAll() {
             // Determine active visible radius based on current scale (capped to clip-path size)
-            const visibleRadius = Math.min(200, currentScale);
+            const visibleRadius = Math.min(225, currentScale);
             
             // Scale background circle and shading circle to match the sphere
             svg.select("circle.sphere-bg").attr("r", visibleRadius);
