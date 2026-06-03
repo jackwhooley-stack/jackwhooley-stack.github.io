@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: #ffffff;
@@ -23,50 +24,50 @@
             margin: 0 auto;
             padding: 40px 20px;
         }
-        
+
         header {
             margin-bottom: 40px;
             width: 100%;
         }
-        
+
         h1 {
             font-size: 1.8rem;
             font-weight: 600;
             margin-bottom: 25px;
             color: #000;
         }
-        
+
         h1 a {
             color: #000;
             text-decoration: none;
         }
-        
+
         h1 a:hover {
             text-decoration: none;
         }
-        
+
         nav {
             margin-bottom: 35px;
             padding-bottom: 20px;
             border-bottom: 1px solid #e0e0e0;
         }
-        
+
         nav a {
             color: #333;
             text-decoration: none;
             margin-right: 15px;
             font-size: 0.95rem;
         }
-        
+
         nav a:hover {
             text-decoration: underline;
         }
-        
+
         nav span {
             color: #999;
             margin: 0 5px;
         }
-        
+
         main {
             margin-bottom: 60px;
         }
@@ -75,19 +76,24 @@
         .languages-container {
             display: flex;
             position: relative;
-            gap: 80px; /* Increased gap spacing */
+            gap: 80px;
+            /* Increased gap spacing */
             align-items: flex-start;
         }
-        
+
         .narrative {
             flex: 1;
-            min-width: 0; /* Prevents text overflow */
-            padding-right: 50px; /* Push the right margin of the text further left */
-            padding-bottom: 25vh; /* Provides scroll runway for bottom elements */
+            min-width: 0;
+            /* Prevents text overflow */
+            padding-right: 50px;
+            /* Push the right margin of the text further left */
+            padding-bottom: 25vh;
+            /* Provides scroll runway for bottom elements */
         }
-        
+
         .step {
-            min-height: 85vh; /* Natural scrolling distance */
+            min-height: 85vh;
+            /* Natural scrolling distance */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -96,26 +102,28 @@
             transition: opacity 0.6s ease, transform 0.6s ease;
             margin-bottom: 50px;
         }
-        
+
         .step:first-child {
             min-height: 60vh;
         }
-        
+
         .step.active {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         .step h2 {
-            font-size: 2.6rem; /* Increased size */
+            font-size: 2.6rem;
+            /* Increased size */
             margin-bottom: 25px;
             font-weight: 600;
             color: #000;
         }
-        
+
         .step p {
             margin-bottom: 20px;
-            font-size: 1.2rem; /* Increased size */
+            font-size: 1.2rem;
+            /* Increased size */
             color: #444;
             line-height: 1.7;
         }
@@ -125,16 +133,16 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Geneva, sans-serif;
             direction: rtl;
             text-align: right;
-            font-size: 3.5rem; /* Highly legible sans-serif, significantly larger size */
+            font-size: 3.5rem;
+            /* Highly legible sans-serif, significantly larger size */
             line-height: 1.6;
             margin-top: 15px;
-            border-right: 3px solid #e0e0e0;
-            padding-right: 15px;
         }
-        
+
         /* Fixed-width column for the visualizer to prevent overlapping */
         .visualizer {
-            width: 380px; /* Increased size */
+            width: 380px;
+            /* Increased size */
             position: -webkit-sticky;
             position: sticky;
             top: 60px;
@@ -144,55 +152,61 @@
             justify-content: center;
             flex-shrink: 0;
         }
-        
+
         .globe-wrapper {
-            width: 360px; /* Increased size */
-            height: 360px; /* Increased size */
+            width: 360px;
+            /* Increased size */
+            height: 360px;
+            /* Increased size */
             position: relative;
         }
-        
+
         /* Globe elements */
         #globe-svg {
-            overflow: hidden; /* Prevent visual overflow */
+            overflow: hidden;
+            /* Prevent visual overflow */
             display: block;
         }
-        
+
         .sphere-bg {
             fill: #ffffff;
-            stroke: #cccccc; /* Subtle spherical outline boundary */
+            stroke: #cccccc;
+            /* Subtle spherical outline boundary */
             stroke-width: 0.8px;
             transition: r 0.1s ease;
         }
-        
+
         .graticule {
             fill: none;
             stroke: #ececec;
             stroke-width: 0.5px;
             stroke-dasharray: 2, 2;
         }
-        
+
         .country {
             fill: #ffffff;
             stroke: #444444;
             stroke-width: 0.6px;
             stroke-linejoin: round;
             stroke-linecap: round;
-            filter: url(#sketch-filter); /* Wobbly pencil sketch lines */
+            filter: url(#sketch-filter);
+            /* Wobbly pencil sketch lines */
             transition: fill 0.6s ease, stroke 0.6s ease;
         }
-        
+
         .country.active {
-            fill: url(#hatch-pattern); /* Hatch line shading */
+            fill: url(#hatch-pattern);
+            /* Hatch line shading */
             stroke: #000000;
             stroke-width: 1.2px;
         }
-        
+
         .globe-shading {
             fill: url(#globe-shadow);
             pointer-events: none;
             transition: r 0.1s ease;
         }
-        
+
         footer {
             margin-top: 80px;
             padding-top: 20px;
@@ -201,11 +215,11 @@
             color: #666;
             width: 100%;
         }
-        
+
         footer a {
             color: #666;
         }
-        
+
         .menu-toggle {
             display: none;
             background: none;
@@ -215,13 +229,13 @@
             padding: 5px;
             color: #000;
         }
-        
+
         /* Responsive design for tablets and mobile */
         @media (max-width: 768px) {
             body {
                 padding: 30px 15px;
             }
-            
+
             header {
                 display: flex;
                 justify-content: space-between;
@@ -230,29 +244,30 @@
                 position: relative;
                 flex-wrap: wrap;
             }
-            
+
             h1 {
                 font-size: 1.5rem;
                 margin-bottom: 0;
             }
-            
+
             .menu-toggle {
                 display: block;
             }
-            
+
             nav {
-                display: none; /* Hidden by default */
+                display: none;
+                /* Hidden by default */
                 width: 100%;
                 flex-direction: column;
                 margin-top: 15px;
                 padding-bottom: 10px;
                 border-bottom: 1px solid #e0e0e0;
             }
-            
+
             nav.open {
                 display: flex;
             }
-            
+
             nav a {
                 display: block;
                 padding: 12px 0;
@@ -260,20 +275,21 @@
                 font-size: 1.05rem;
                 border-bottom: 1px solid #f5f5f5;
             }
-            
+
             nav a:last-child {
                 border-bottom: none;
             }
-            
+
             nav span {
-                display: none; /* Hide dots on mobile */
+                display: none;
+                /* Hide dots on mobile */
             }
-            
+
             .languages-container {
                 flex-direction: column-reverse;
                 gap: 20px;
             }
-            
+
             .visualizer {
                 position: -webkit-sticky;
                 position: sticky;
@@ -286,43 +302,48 @@
                 margin-bottom: 20px;
                 padding: 10px 0;
             }
-            
+
             .globe-wrapper {
                 width: 200px;
                 height: 200px;
             }
-            
+
             .narrative {
                 width: 100%;
-                padding-right: 0; /* Reset desktop right padding to center on mobile */
+                padding-right: 0;
+                /* Reset desktop right padding to center on mobile */
                 padding-bottom: 5vh;
             }
-            
+
             .step {
                 min-height: 50vh;
                 margin-bottom: 40px;
-                text-align: center; /* Center-align text on mobile */
-                padding: 0 35px; /* Increase side margins / white space on mobile */
+                text-align: center;
+                /* Center-align text on mobile */
+                padding: 0 35px;
+                /* Increase side margins / white space on mobile */
             }
-            
+
             .step h2 {
                 font-size: 1.8rem;
                 text-align: center;
             }
 
             .step p {
-                text-align: center; /* Explicitly center paragraphs on mobile */
+                text-align: center;
+                /* Explicitly center paragraphs on mobile */
             }
-            
+
             .arabic-text {
-                text-align: center; /* Center-align Arabic text on mobile */
-                font-size: 1.9rem; /* Increased on mobile */
-                border-right: none;
-                padding-right: 0;
+                text-align: center;
+                /* Center-align Arabic text on mobile */
+                font-size: 1.9rem;
+                /* Increased on mobile */
             }
         }
     </style>
 </head>
+
 <body class="languages-page">
     <header>
         <h1><a href="index.html">Jack Whooley</a></h1>
@@ -339,7 +360,7 @@
             <a href="languages.html">languages</a>
         </nav>
     </header>
-    
+
     <main>
         <div class="languages-container">
             <!-- Left Column: Narrative steps -->
@@ -347,25 +368,30 @@
                 <section class="step" data-step="0">
                     <h2>languages</h2>
                 </section>
-                
+
                 <section class="step" data-step="1">
                     <h2>Español</h2>
-                    <p>El español fue el primer idioma que aprendí después del inglés. Empecé a estudiarlo en el colegio y en 2019 tuve la suerte de realizar un intercambio en Salamanca, España, durante mi licenciatura. En 2024, pasé dos meses más en Medellín, Colombia, mejorando mi español. Hasta la fecha no me he presentado al DELE, pero considero que tengo un nivel cercano al C1.</p>
+                    <p>El español fue el primer idioma que aprendí después del inglés. Empecé a estudiarlo en el colegio
+                        y en 2019 tuve la suerte de realizar un intercambio en Salamanca, España, durante mi
+                        licenciatura. En 2024, pasé dos meses más en Medellín, Colombia, mejorando mi español. Hasta la
+                        fecha no me he presentado al DELE, pero considero que tengo un nivel cercano al C1.</p>
                 </section>
-                
+
                 <section class="step" data-step="2">
                     <h2>عربي</h2>
                     <p class="arabic-text">
-                        بدأت أتعلم عربي في 2024 في القاهرة. أنا كنت مركز على اللهجة المصرية خصوصاً. ولما سبت مصر، كمّلت أتعلم كل يوم مع مدرّستي. لسة معملتش امتحان عربي، بس بفتكر إن عندي مستوى B1 في نظام CEFR. أنا بحب العالم العربي، خصوصاً المسلسلات والتاريخ.
+                        بدأت أتعلم عربي في 2024 في القاهرة. أنا كنت مركز على اللهجة المصرية خصوصاً. ولما سبت مصر، كمّلت
+                        أتعلم كل يوم مع مدرّستي. لسة معملتش امتحان عربي، بس بفتكر إن عندي مستوى B1. أنا بحب العالم
+                        العربي، خصوصاً المسلسلات والتاريخ.
                     </p>
                 </section>
-                
+
                 <section class="step" data-step="3">
                     <h2>中文</h2>
                     <p>Coming soon</p>
                 </section>
             </div>
-            
+
             <!-- Right Column: Sticky Globe Visualizer -->
             <div class="visualizer">
                 <div class="globe-wrapper">
@@ -379,11 +405,13 @@
                             <!-- Displacement map filter for wobbly, sketchy outlines -->
                             <filter id="sketch-filter" x="-20%" y="-20%" width="140%" height="140%">
                                 <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
-                                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+                                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R"
+                                    yChannelSelector="G" />
                             </filter>
 
                             <!-- One-way diagonal parallel lines pattern for country highlights -->
-                            <pattern id="hatch-pattern" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                            <pattern id="hatch-pattern" width="6" height="6" patternUnits="userSpaceOnUse"
+                                patternTransform="rotate(45)">
                                 <rect width="6" height="6" fill="#fafafa" />
                                 <line x1="0" y1="0" x2="0" y2="6" stroke="#444444" stroke-width="0.6" />
                             </pattern>
@@ -401,7 +429,7 @@
             </div>
         </div>
     </main>
-    
+
     <footer>
         © 2026 Jack Whooley. All rights reserved.
     </footer>
@@ -574,11 +602,11 @@
         function renderAll() {
             // Determine active visible radius based on current scale (capped to clip-path size)
             const visibleRadius = Math.min(225, currentScale);
-            
+
             // Scale background circle and shading circle to match the sphere
             svg.select("circle.sphere-bg").attr("r", visibleRadius);
             svg.select("circle.globe-shading").attr("r", visibleRadius);
-            
+
             // Redraw paths
             svg.selectAll("path.graticule").attr("d", pathGenerator);
             svg.selectAll(".country").attr("d", pathGenerator);
@@ -590,13 +618,13 @@
                 const scrollY = window.scrollY || window.pageYOffset;
                 const scrollHeight = document.documentElement.scrollHeight;
                 const windowHeight = window.innerHeight;
-                
+
                 // Force state 0 (languages) if scrolled to the very top
                 if (scrollY <= 20) {
                     if (activeIndex !== 0) updateState(0);
                     return;
                 }
-                
+
                 // Force final state (Chinese/Taiwan) if scrolled to the very bottom
                 if (scrollY + windowHeight >= scrollHeight - 40) {
                     const lastIndex = states.length - 1;
@@ -630,10 +658,11 @@
             window.addEventListener("scroll", handleScroll);
 
             // Collapsible mobile nav menu listener
-            document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('menu-toggle').addEventListener('click', function () {
                 document.getElementById('site-nav').classList.toggle('open');
             });
         }
     </script>
 </body>
+
 </html>
