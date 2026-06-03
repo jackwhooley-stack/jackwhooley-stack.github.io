@@ -125,7 +125,7 @@
             font-family: 'Traditional Arabic', 'Arabic Typesetting', 'Geeza Pro', 'Simplified Arabic', serif;
             direction: rtl;
             text-align: right;
-            font-size: 1.6rem; /* Increased size */
+            font-size: 2.8rem; /* Increased for better legibility */
             line-height: 2;
             margin-top: 15px;
             border-right: 3px solid #e0e0e0;
@@ -302,14 +302,21 @@
                 min-height: 50vh;
                 margin-bottom: 40px;
                 text-align: center; /* Center-align text on mobile */
+                padding: 0 35px; /* Increase side margins / white space on mobile */
             }
             
             .step h2 {
                 font-size: 1.8rem;
+                text-align: center;
+            }
+
+            .step p {
+                text-align: center; /* Explicitly center paragraphs on mobile */
             }
             
             .arabic-text {
                 text-align: center; /* Center-align Arabic text on mobile */
+                font-size: 1.9rem; /* Increased on mobile */
                 border-right: none;
                 padding-right: 0;
             }
