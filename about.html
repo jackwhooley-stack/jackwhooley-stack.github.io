@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: #ffffff;
@@ -20,60 +21,60 @@
             margin: 0 auto;
             padding: 40px 20px;
         }
-        
+
         header {
             margin-bottom: 40px;
         }
-        
+
         h1 {
             font-size: 1.8rem;
             font-weight: 600;
             margin-bottom: 25px;
             color: #000;
         }
-        
+
         h1 a {
             color: #000;
             text-decoration: none;
         }
-        
+
         h1 a:hover {
             text-decoration: none;
         }
-        
+
         nav {
             margin-bottom: 35px;
             padding-bottom: 20px;
             border-bottom: 1px solid #e0e0e0;
         }
-        
+
         nav a {
             color: #333;
             text-decoration: none;
             margin-right: 15px;
             font-size: 0.95rem;
         }
-        
+
         nav a:hover {
             text-decoration: underline;
         }
-        
+
         nav span {
             color: #999;
             margin: 0 5px;
         }
-        
+
         main {
             margin-bottom: 60px;
         }
-        
+
         h2 {
             font-size: 1.5rem;
             margin-bottom: 30px;
             font-weight: 600;
             color: #000;
         }
-        
+
         h3 {
             font-size: 1.1rem;
             margin-bottom: 20px;
@@ -81,49 +82,49 @@
             color: #000;
             margin-top: 40px;
         }
-        
+
         p {
             margin-bottom: 20px;
             font-size: 1rem;
             color: #333;
         }
-        
+
         a {
             color: #0066cc;
             text-decoration: none;
         }
-        
+
         a:hover {
             text-decoration: underline;
         }
-        
+
         .experience-item {
             margin-bottom: 40px;
         }
-        
+
         .job-title {
             font-weight: 600;
             font-size: 1.05rem;
             color: #000;
             margin-bottom: 5px;
         }
-        
+
         .company {
             color: #666;
             margin-bottom: 5px;
         }
-        
+
         .duration {
             color: #999;
             font-size: 0.9rem;
             margin-bottom: 12px;
         }
-        
+
         .description {
             color: #333;
             line-height: 1.6;
         }
-        
+
         footer {
             margin-top: 80px;
             padding-top: 20px;
@@ -131,11 +132,11 @@
             font-size: 0.9rem;
             color: #666;
         }
-        
+
         footer a {
             color: #666;
         }
-        
+
         .menu-toggle {
             display: none;
             background: none;
@@ -145,12 +146,12 @@
             padding: 5px;
             color: #000;
         }
-        
+
         @media (max-width: 768px) {
             body {
                 padding: 30px 15px;
             }
-            
+
             header {
                 display: flex;
                 justify-content: space-between;
@@ -159,29 +160,30 @@
                 position: relative;
                 flex-wrap: wrap;
             }
-            
+
             h1 {
                 font-size: 1.5rem;
                 margin-bottom: 0;
             }
-            
+
             .menu-toggle {
                 display: block;
             }
-            
+
             nav {
-                display: none; /* Hidden by default */
+                display: none;
+                /* Hidden by default */
                 width: 100%;
                 flex-direction: column;
                 margin-top: 15px;
                 padding-bottom: 10px;
                 border-bottom: 1px solid #e0e0e0;
             }
-            
+
             nav.open {
                 display: flex;
             }
-            
+
             nav a {
                 display: block;
                 padding: 12px 0;
@@ -189,17 +191,19 @@
                 font-size: 1.05rem;
                 border-bottom: 1px solid #f5f5f5;
             }
-            
+
             nav a:last-child {
                 border-bottom: none;
             }
-            
+
             nav span {
-                display: none; /* Hide dots on mobile */
+                display: none;
+                /* Hide dots on mobile */
             }
         }
     </style>
 </head>
+
 <body>
     <header>
         <h1><a href="index.html">Jack Whooley</a></h1>
@@ -216,25 +220,28 @@
             <a href="languages.html">languages</a>
         </nav>
     </header>
-    
+
     <main>
         <h3>Experience</h3>
-        
+
         <div class="experience-item">
             <div class="job-title">Short Term Contractor</div>
             <div class="company">The World Bank</div>
             <div class="duration">2024 – Present</div>
             <div class="description">
-                Helping the World Bank and the joint government of Bosnia and Herzegovina move forward with a €46 million investment in solid waste management facilities and operations, improving landfill and collection practices for over a dozen localities.  Lead analyst for GhG and debt capacity modelling.
+                Helping the World Bank and the joint government of Bosnia and Herzegovina make a €46 million investment
+                in solid waste management facilities and operations, improving landfill and collection practices for
+                over a dozen localities. Lead analyst for GhG and debt capacity modelling.
             </div>
         </div>
-        
+
         <div class="experience-item">
             <div class="job-title">Finance and Economics Consulting - Senior Analyst</div>
             <div class="company">PwC New Zealand</div>
             <div class="duration">2022 – 2024</div>
             <div class="description">
-                Worked on asset valuations for some of New Zealand's largest energy gentailers, and otherwise on challenging modelling problems across energy, infrastructure and operations.
+                Worked on asset valuations for some of New Zealand's largest energy gentailers, and otherwise on
+                challenging modelling problems across energy, infrastructure and operations.
             </div>
         </div>
 
@@ -246,14 +253,15 @@
             <div class="duration">2020 – 2021</div>
         </div>
     </main>
-    
+
     <footer>
-         © 2026 Jack Whooley. All rights reserved.
+        © 2026 Jack Whooley. All rights reserved.
     </footer>
     <script>
-        document.getElementById('menu-toggle').addEventListener('click', function() {
+        document.getElementById('menu-toggle').addEventListener('click', function () {
             document.getElementById('site-nav').classList.toggle('open');
         });
     </script>
 </body>
+
 </html>
