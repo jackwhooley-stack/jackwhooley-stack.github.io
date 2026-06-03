@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Languages - Jack Whooley</title>
+    <!-- Load D3.js and TopoJSON via CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+            max-width: 1000px; /* Wider layout for the side-by-side columns */
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        header {
+            margin-bottom: 40px;
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #000;
+        }
+        
+        h1 a {
+            color: #000;
+            text-decoration: none;
+        }
+        
+        h1 a:hover {
+            text-decoration: none;
+        }
+        
+        nav {
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        nav a {
+            color: #333;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 0.95rem;
+        }
+        
+        nav a:hover {
+            text-decoration: underline;
+        }
+        
+        nav span {
+            color: #999;
+            margin: 0 5px;
+        }
+        
+        main {
+            margin-bottom: 60px;
+        }
+
+        /* Scrollytelling Layout */
+        .languages-container {
+            display: flex;
+            position: relative;
+            gap: 50px;
+            align-items: flex-start;
+        }
+        
+        .narrative {
+            flex: 1.2;
+            padding-right: 20px;
+        }
+        
+        .step {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0.25;
+            transform: translateY(20px);
+            transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            margin-bottom: 100px;
+        }
+        
+        .step:first-child {
+            min-height: 60vh;
+        }
+        
+        .step.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .step h2 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+            color: #000;
+        }
+        
+        .step p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: #444;
+            line-height: 1.7;
+        }
+
+        /* Arabic layout adjustments */
+        .arabic-text {
+            font-family: 'Traditional Arabic', 'Arabic Typesetting', 'Geeza Pro', 'Simplified Arabic', serif;
+            direction: rtl;
+            text-align: right;
+            font-size: 1.4rem;
+            line-height: 2;
+            margin-top: 15px;
+            border-right: 3px solid #e0e0e0;
+            padding-right: 15px;
+        }
+        
+        .visualizer {
+            flex: 1;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 40px;
+            height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .globe-wrapper {
+            width: 100%;
+            max-width: 420px;
+            aspect-ratio: 1;
+            position: relative;
+        }
+        
+        /* Globe SVG styling */
+        #globe-svg {
+            overflow: visible;
+            display: block;
+        }
+        
+        .sphere-bg {
+            fill: #ffffff;
+            stroke: #d8d8d8;
+            stroke-width: 1px;
+        }
+        
+        .graticule {
+            fill: none;
+            stroke: #eaeaea;
+            stroke-width: 0.5px;
+            stroke-dasharray: 2, 2;
+        }
+        
+        .country {
+            fill: #ffffff;
+            stroke: #444444;
+            stroke-width: 0.5px;
+            transition: fill 0.6s cubic-bezier(0.25, 1, 0.5, 1), stroke 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        
+        .country.active {
+            fill: url(#hex-pattern);
+            stroke: #000000;
+            stroke-width: 1.2px;
+        }
+        
+        .globe-shading {
+            fill: url(#globe-shadow);
+            pointer-events: none;
+        }
+        
+        .globe-halo {
+            fill: none;
+            stroke: #222222;
+            stroke-width: 1.5px;
+            pointer-events: none;
+        }
+        
+        footer {
+            margin-top: 80px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+            color: #666;
+            width: 100%;
+        }
+        
+        footer a {
+            color: #666;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 30px 15px;
+                max-width: 700px;
+            }
+            
+            .languages-container {
+                flex-direction: column-reverse;
+                gap: 20px;
+            }
+            
+            .visualizer {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 0;
+                width: 100%;
+                height: 250px;
+                background-color: rgba(255, 255, 255, 0.95);
+                z-index: 100;
+                border-bottom: 1px solid #eee;
+                margin-bottom: 20px;
+                padding: 10px 0;
+            }
+            
+            .globe-wrapper {
+                max-width: 220px;
+            }
+            
+            .narrative {
+                width: 100%;
+                padding-right: 0;
+            }
+            
+            .step {
+                min-height: 55vh;
+                margin-bottom: 60px;
+            }
+            
+            .step h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Jack Whooley</a></h1>
+        <nav>
+            <a href="index.html">home</a>
+            <span>·</span>
+            <a href="about.html">about</a>
+            <span>·</span>
+            <a href="projects.html">projects</a>
+            <span>·</span>
+            <a href="mathematics.html">mathematics</a>
+            <span>·</span>
+            <a href="languages.html">languages</a>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="languages-container">
+            <!-- Left Column: Narrative steps -->
+            <div class="narrative">
+                <section class="step" data-step="0">
+                    <h2>languages</h2>
+                    <p>I enjoy learning languages as a window into different cultures, histories, and ways of thinking. This map tracks my linguistic journey, highlighting countries where these languages are spoken.</p>
+                    <p>Scroll down to see the languages I have been exploring.</p>
+                </section>
+                
+                <section class="step" data-step="1">
+                    <h2>Espanol</h2>
+                    <p>[I will fill what the text body says later]</p>
+                </section>
+                
+                <section class="step" data-step="2">
+                    <h2>عربي</h2>
+                    <p class="arabic-text">
+                        بدأت أتعلم عربي في 2024 في القاهرة. أنا كنت مركز على اللهجة المصرية خصوصاً. ولما سبت مصر، كمّلت أتعلم كل يوم مع مدرّستي. لسة معملتش امتحان عربي، بس بفتكر إن عندي مستوى B1 في نظام CEFR. أنا بحب العالم العربي، خصوصاً المسلسلات والتاريخ.
+                    </p>
+                </section>
+                
+                <section class="step" data-step="3">
+                    <h2>中文</h2>
+                    <p>[I will fill what the text body says later]</p>
+                </section>
+            </div>
+            
+            <!-- Right Column: Sticky Globe Visualizer -->
+            <div class="visualizer">
+                <div class="globe-wrapper">
+                    <svg id="globe-svg" viewBox="0 0 500 500" width="100%" height="100%">
+                        <defs>
+                            <!-- Hexagon pattern for shaded countries -->
+                            <pattern id="hex-pattern" width="13.856" height="24" patternUnits="userSpaceOnUse" patternTransform="scale(1.2)">
+                                <rect width="13.856" height="24" fill="#fafafa" />
+                                <path d="M6.928 0 L13.856 4 L13.856 12 L6.928 16 L0 12 L0 4 Z" fill="none" stroke="#777777" stroke-width="0.5" />
+                                <path d="M6.928 24 L13.856 20 L13.856 12 L6.928 16 L0 12 L0 20 Z" fill="none" stroke="#777777" stroke-width="0.5" />
+                            </pattern>
+                            <!-- Spherical overlay gradient -->
+                            <radialGradient id="globe-shadow" cx="40%" cy="40%" r="60%">
+                                <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
+                                <stop offset="60%" stop-color="#e0e0e0" stop-opacity="0.25" />
+                                <stop offset="100%" stop-color="#a0a0a0" stop-opacity="0.6" />
+                            </radialGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        © 2026 Jack Whooley. All rights reserved.
+    </footer>
+
+    <script>
+        const WORLD_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+
+        // Coordinates & Scales for each state
+        const states = [
+            {
+                id: 0,
+                name: "Languages Intro",
+                targetCoords: [174, -41], // New Zealand
+                scale: 200,
+                activeCountryId: null // No active country highlight
+            },
+            {
+                id: 1,
+                name: "Espanol",
+                targetCoords: [-73, 4.5], // Colombia
+                scale: 450,
+                activeCountryId: 170 // Colombia (ISO 170)
+            },
+            {
+                id: 2,
+                name: "عربي",
+                targetCoords: [30, 26], // Egypt
+                scale: 450,
+                activeCountryId: 818 // Egypt (ISO 818)
+            },
+            {
+                id: 3,
+                name: "中文",
+                targetCoords: [121, 23.5], // Taiwan
+                scale: 850, // Taiwan is small, so zoom in extra close
+                activeCountryId: 158 // Taiwan (ISO 158)
+            }
+        ];
+
+        let currentCoords = [...states[0].targetCoords];
+        let currentScale = states[0].scale;
+        let activeIndex = 0;
+        let currentTransition = null;
+
+        // D3 Elements Setup
+        const svg = d3.select("#globe-svg");
+        const width = 500;
+        const height = 500;
+
+        // Projection Configuration
+        const projection = d3.geoOrthographic()
+            .scale(currentScale)
+            .translate([width / 2, height / 2])
+            .rotate([-currentCoords[0], -currentCoords[1]]);
+
+        const pathGenerator = d3.geoPath().projection(projection);
+
+        // 1. Globe base sphere/ocean
+        svg.append("path")
+            .datum({type: "Sphere"})
+            .attr("class", "sphere-bg")
+            .attr("d", pathGenerator);
+
+        // 2. Graticule lines
+        const graticule = d3.geoGraticule()();
+        svg.append("path")
+            .datum(graticule)
+            .attr("class", "graticule")
+            .attr("d", pathGenerator);
+
+        // 3. Country paths group
+        const countriesGroup = svg.append("g").attr("class", "countries-group");
+
+        // 4. Shadow overlay for 3D sphere look
+        svg.append("path")
+            .datum({type: "Sphere"})
+            .attr("class", "globe-shading")
+            .attr("d", pathGenerator);
+
+        // 5. Hard outline (halo)
+        svg.append("path")
+            .datum({type: "Sphere"})
+            .attr("class", "globe-halo")
+            .attr("d", pathGenerator);
+
+        let countriesFeatures = [];
+
+        // Load map data
+        fetch(WORLD_URL)
+            .then(res => res.json())
+            .then(world => {
+                countriesFeatures = topojson.feature(world, world.objects.countries).features;
+
+                // Draw landmasses
+                countriesGroup.selectAll(".country")
+                    .data(countriesFeatures)
+                    .enter()
+                    .append("path")
+                    .attr("class", "country")
+                    .attr("data-id", d => d.id)
+                    .attr("d", pathGenerator);
+
+                // Initial state
+                updateState(0, true);
+                setupScroll();
+            })
+            .catch(err => {
+                console.error("Failed to load map topology:", err);
+            });
+
+        // Trigger animations/highlights for a state
+        function updateState(index, immediate = false) {
+            activeIndex = index;
+            const state = states[index];
+
+            // Update highlighted country
+            countriesGroup.selectAll(".country")
+                .classed("active", d => +d.id === state.activeCountryId);
+
+            // Update step layout focus class
+            d3.selectAll(".step")
+                .classed("active", (d, i) => i === index);
+
+            const startCoords = [...currentCoords];
+            const targetCoords = state.targetCoords;
+            const startScale = currentScale;
+            const targetScale = state.scale;
+
+            if (immediate) {
+                currentCoords = [...targetCoords];
+                currentScale = targetScale;
+                projection.rotate([-currentCoords[0], -currentCoords[1]]);
+                projection.scale(currentScale);
+                renderAll();
+                return;
+            }
+
+            if (currentTransition) {
+                currentTransition.stop();
+            }
+
+            // Great-circle interpolation for smooth rotation path
+            const interpolateCoords = d3.geoInterpolate(startCoords, targetCoords);
+            const interpolateScale = d3.interpolateNumber(startScale, targetScale);
+
+            currentTransition = d3.transition()
+                .duration(1500)
+                .ease(d3.easeCubicOut)
+                .tween("globe", () => {
+                    return (t) => {
+                        const coords = interpolateCoords(t);
+                        currentCoords = coords;
+                        currentScale = interpolateScale(t);
+
+                        projection.rotate([-coords[0], -coords[1]]);
+                        projection.scale(currentScale);
+
+                        renderAll();
+                    };
+                });
+        }
+
+        // Redraw all path structures
+        function renderAll() {
+            svg.selectAll("path.sphere-bg").attr("d", pathGenerator);
+            svg.selectAll("path.graticule").attr("d", pathGenerator);
+            svg.selectAll(".country").attr("d", pathGenerator);
+            svg.selectAll("path.globe-shading").attr("d", pathGenerator);
+            svg.selectAll("path.globe-halo").attr("d", pathGenerator);
+        }
+
+        // Intersection Observer scroll tracking
+        function setupScroll() {
+            const options = {
+                root: null,
+                rootMargin: "-30% 0px -50% 0px", // triggers when element crosses active midsection
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = parseInt(entry.target.getAttribute("data-step"));
+                        if (index !== activeIndex) {
+                            updateState(index);
+                        }
+                    }
+                });
+            }, options);
+
+            document.querySelectorAll(".step").forEach(step => {
+                observer.observe(step);
+            });
+        }
+    </script>
+</body>
+</html>
