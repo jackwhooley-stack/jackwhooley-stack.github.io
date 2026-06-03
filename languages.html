@@ -19,7 +19,7 @@
             background-color: #ffffff;
             color: #333;
             line-height: 1.6;
-            max-width: 1000px; /* Wider layout for the side-by-side columns */
+            max-width: 1000px;
             margin: 0 auto;
             padding: 40px 20px;
         }
@@ -71,28 +71,28 @@
             margin-bottom: 60px;
         }
 
-        /* Scrollytelling Layout */
+        /* Responsive Side-by-Side Scrollytelling */
         .languages-container {
             display: flex;
             position: relative;
-            gap: 50px;
+            gap: 60px;
             align-items: flex-start;
         }
         
         .narrative {
-            flex: 1.2;
-            padding-right: 20px;
+            flex: 1;
+            min-width: 0; /* Prevents text overflow / layout shifting */
         }
         
         .step {
-            min-height: 70vh;
+            min-height: 75vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            opacity: 0.25;
-            transform: translateY(20px);
-            transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-            margin-bottom: 100px;
+            opacity: 0.2;
+            transform: translateY(15px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            margin-bottom: 80px;
         }
         
         .step:first-child {
@@ -118,7 +118,7 @@
             line-height: 1.7;
         }
 
-        /* Arabic layout adjustments */
+        /* Arabic styling rules */
         .arabic-text {
             font-family: 'Traditional Arabic', 'Arabic Typesetting', 'Geeza Pro', 'Simplified Arabic', serif;
             direction: rtl;
@@ -130,25 +130,26 @@
             padding-right: 15px;
         }
         
+        /* Fixed-width column for the visualizer to prevent overlapping */
         .visualizer {
-            flex: 1;
+            width: 320px;
             position: -webkit-sticky;
             position: sticky;
-            top: 40px;
+            top: 60px;
             height: 75vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0; /* Ensure it never shrinks */
         }
         
         .globe-wrapper {
-            width: 100%;
-            max-width: 420px;
-            aspect-ratio: 1;
+            width: 300px;
+            height: 300px;
             position: relative;
         }
         
-        /* Globe SVG styling */
+        /* Globe elements */
         #globe-svg {
             overflow: visible;
             display: block;
@@ -156,13 +157,13 @@
         
         .sphere-bg {
             fill: #ffffff;
-            stroke: #d8d8d8;
+            stroke: #f3f3f3; /* Very faint globe base edge */
             stroke-width: 1px;
         }
         
         .graticule {
             fill: none;
-            stroke: #eaeaea;
+            stroke: #ececec;
             stroke-width: 0.5px;
             stroke-dasharray: 2, 2;
         }
@@ -170,25 +171,21 @@
         .country {
             fill: #ffffff;
             stroke: #444444;
-            stroke-width: 0.5px;
-            transition: fill 0.6s cubic-bezier(0.25, 1, 0.5, 1), stroke 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            stroke-width: 0.6px;
+            stroke-linejoin: round;
+            stroke-linecap: round;
+            filter: url(#sketch-filter); /* Wobbly pencil outline filter */
+            transition: fill 0.6s ease, stroke 0.6s ease;
         }
         
         .country.active {
-            fill: url(#hex-pattern);
+            fill: url(#hatch-pattern); /* Diagonal one-way lines shading */
             stroke: #000000;
             stroke-width: 1.2px;
         }
         
         .globe-shading {
             fill: url(#globe-shadow);
-            pointer-events: none;
-        }
-        
-        .globe-halo {
-            fill: none;
-            stroke: #222222;
-            stroke-width: 1.5px;
             pointer-events: none;
         }
         
@@ -205,11 +202,10 @@
             color: #666;
         }
         
-        /* Responsive adjustments */
+        /* Responsive design for tablets and mobile */
         @media (max-width: 768px) {
             body {
                 padding: 30px 15px;
-                max-width: 700px;
             }
             
             .languages-container {
@@ -222,7 +218,7 @@
                 position: sticky;
                 top: 0;
                 width: 100%;
-                height: 250px;
+                height: 220px;
                 background-color: rgba(255, 255, 255, 0.95);
                 z-index: 100;
                 border-bottom: 1px solid #eee;
@@ -231,17 +227,17 @@
             }
             
             .globe-wrapper {
-                max-width: 220px;
+                width: 200px;
+                height: 200px;
             }
             
             .narrative {
                 width: 100%;
-                padding-right: 0;
             }
             
             .step {
-                min-height: 55vh;
-                margin-bottom: 60px;
+                min-height: 50vh;
+                margin-bottom: 40px;
             }
             
             .step h2 {
@@ -250,7 +246,7 @@
         }
     </style>
 </head>
-<body>
+<body class="languages-page">
     <header>
         <h1><a href="index.html">Jack Whooley</a></h1>
         <nav>
@@ -299,17 +295,23 @@
                 <div class="globe-wrapper">
                     <svg id="globe-svg" viewBox="0 0 500 500" width="100%" height="100%">
                         <defs>
-                            <!-- Hexagon pattern for shaded countries -->
-                            <pattern id="hex-pattern" width="13.856" height="24" patternUnits="userSpaceOnUse" patternTransform="scale(1.2)">
-                                <rect width="13.856" height="24" fill="#fafafa" />
-                                <path d="M6.928 0 L13.856 4 L13.856 12 L6.928 16 L0 12 L0 4 Z" fill="none" stroke="#777777" stroke-width="0.5" />
-                                <path d="M6.928 24 L13.856 20 L13.856 12 L6.928 16 L0 12 L0 20 Z" fill="none" stroke="#777777" stroke-width="0.5" />
+                            <!-- Displacement map filter for wobbly, sketchy line outlines -->
+                            <filter id="sketch-filter" x="-20%" y="-20%" width="140%" height="140%">
+                                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+                                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+                            </filter>
+
+                            <!-- One-way parallel line hatching pattern for shading -->
+                            <pattern id="hatch-pattern" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                                <rect width="8" height="8" fill="#fafafa" />
+                                <line x1="0" y1="0" x2="0" y2="8" stroke="#555555" stroke-width="0.8" />
                             </pattern>
-                            <!-- Spherical overlay gradient -->
+
+                            <!-- Radial shading for 3D sphere gradient -->
                             <radialGradient id="globe-shadow" cx="40%" cy="40%" r="60%">
                                 <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
-                                <stop offset="60%" stop-color="#e0e0e0" stop-opacity="0.25" />
-                                <stop offset="100%" stop-color="#a0a0a0" stop-opacity="0.6" />
+                                <stop offset="65%" stop-color="#e0e0e0" stop-opacity="0.2" />
+                                <stop offset="100%" stop-color="#999999" stop-opacity="0.45" />
                             </radialGradient>
                         </defs>
                     </svg>
@@ -331,8 +333,8 @@
                 id: 0,
                 name: "Languages Intro",
                 targetCoords: [174, -41], // New Zealand
-                scale: 200,
-                activeCountryId: null // No active country highlight
+                scale: 120, // Zoomed all the way out initially
+                activeCountryId: null
             },
             {
                 id: 1,
@@ -397,11 +399,7 @@
             .attr("class", "globe-shading")
             .attr("d", pathGenerator);
 
-        // 5. Hard outline (halo)
-        svg.append("path")
-            .datum({type: "Sphere"})
-            .attr("class", "globe-halo")
-            .attr("d", pathGenerator);
+        // (No black outline halo is appended to keep the boundaries open and outline-free)
 
         let countriesFeatures = [];
 
@@ -433,9 +431,9 @@
             activeIndex = index;
             const state = states[index];
 
-            // Update highlighted country
+            // Update active state class for highlight shading
             countriesGroup.selectAll(".country")
-                .classed("active", d => +d.id === state.activeCountryId);
+                .classed("active", d => d && d.id && parseInt(d.id) === state.activeCountryId);
 
             // Update step layout focus class
             d3.selectAll(".step")
@@ -461,16 +459,27 @@
 
             // Great-circle interpolation for smooth rotation path
             const interpolateCoords = d3.geoInterpolate(startCoords, targetCoords);
-            const interpolateScale = d3.interpolateNumber(startScale, targetScale);
+
+            // Compute midpoint scale dip: scale down to zoom out during flight
+            const minScale = Math.min(startScale, targetScale);
+            const baseDipScale = Math.min(110, minScale * 0.75); // zoom out significantly
 
             currentTransition = d3.transition()
-                .duration(1500)
-                .ease(d3.easeCubicOut)
+                .duration(1600)
+                .ease(d3.easeCubicInOut)
                 .tween("globe", () => {
                     return (t) => {
                         const coords = interpolateCoords(t);
                         currentCoords = coords;
-                        currentScale = interpolateScale(t);
+
+                        // Parabolic scale dip function
+                        // Peak is at t = 0.5 where 4 * t * (1 - t) = 1.0
+                        const peakFactor = 4 * t * (1 - t);
+                        const linearScale = startScale + t * (targetScale - startScale);
+                        const midLinearScale = (startScale + targetScale) / 2;
+                        const dipAmount = Math.max(0, midLinearScale - baseDipScale);
+
+                        currentScale = linearScale - (peakFactor * dipAmount);
 
                         projection.rotate([-coords[0], -coords[1]]);
                         projection.scale(currentScale);
@@ -486,31 +495,35 @@
             svg.selectAll("path.graticule").attr("d", pathGenerator);
             svg.selectAll(".country").attr("d", pathGenerator);
             svg.selectAll("path.globe-shading").attr("d", pathGenerator);
-            svg.selectAll("path.globe-halo").attr("d", pathGenerator);
         }
 
-        // Intersection Observer scroll tracking
+        // Proximity-to-center scroll tracking
         function setupScroll() {
-            const options = {
-                root: null,
-                rootMargin: "-30% 0px -50% 0px", // triggers when element crosses active midsection
-                threshold: 0
-            };
+            function handleScroll() {
+                let closestIndex = 0;
+                let minDiff = Infinity;
+                const viewportCenter = window.innerHeight / 2;
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const index = parseInt(entry.target.getAttribute("data-step"));
-                        if (index !== activeIndex) {
-                            updateState(index);
-                        }
+                const steps = document.querySelectorAll(".step");
+                steps.forEach((step, index) => {
+                    const rect = step.getBoundingClientRect();
+                    const stepCenter = rect.top + rect.height / 2;
+                    const diff = Math.abs(viewportCenter - stepCenter);
+
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        closestIndex = index;
                     }
                 });
-            }, options);
 
-            document.querySelectorAll(".step").forEach(step => {
-                observer.observe(step);
-            });
+                if (closestIndex !== activeIndex) {
+                    updateState(closestIndex);
+                }
+            }
+
+            // Run on load and register listener
+            handleScroll();
+            window.addEventListener("scroll", handleScroll);
         }
     </script>
 </body>
