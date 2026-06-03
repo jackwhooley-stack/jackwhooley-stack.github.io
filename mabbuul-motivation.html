@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -109,26 +110,76 @@
             color: #666;
         }
 
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+            padding: 5px;
+            color: #000;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 30px 15px;
             }
 
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 25px;
+                position: relative;
+                flex-wrap: wrap;
+            }
+
             h1 {
                 font-size: 1.5rem;
+                margin-bottom: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                display: none; /* Hidden by default */
+                width: 100%;
+                flex-direction: column;
+                margin-top: 15px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            nav.open {
+                display: flex;
             }
 
             nav a {
-                display: inline-block;
-                margin-bottom: 10px;
+                display: block;
+                padding: 12px 0;
+                margin-right: 0;
+                font-size: 1.05rem;
+                border-bottom: 1px solid #f5f5f5;
+            }
+
+            nav a:last-child {
+                border-bottom: none;
+            }
+
+            nav span {
+                display: none; /* Hide dots on mobile */
             }
         }
     </style>
 </head>
+
 <body>
     <header>
         <h1><a href="index.html">Jack Whooley</a></h1>
-        <nav>
+        <button id="menu-toggle" class="menu-toggle" aria-label="Toggle Menu">☰</button>
+        <nav id="site-nav">
             <a href="index.html">home</a>
             <span>·</span>
             <a href="about.html">about</a>
@@ -148,20 +199,44 @@
 
         <p>I am building Mabbuul to try and fill the gap between textbooks and LingQ.</p>
 
-        <p>LingQ is a language learning platform created by Steve Kaufmann, a Canadian former diplomat and polyglot. The vision for LingQ is a practical implementation of <a href="https://en.wikipedia.org/wiki/Stephen_Krashen" target="_blank">Stephen Krashen's theories of language acquisition</a>. In short, LingQ emphasises massive, comprehensible input and deemphasises studying grammar and flashcard drills.</p>
+        <p>LingQ is a language learning platform created by Steve Kaufmann, a Canadian former diplomat and polyglot. The
+            vision for LingQ is a practical implementation of <a href="https://en.wikipedia.org/wiki/Stephen_Krashen"
+                target="_blank">Stephen Krashen's theories of language acquisition</a>. In short, LingQ emphasises
+            massive, comprehensible input and deemphasises studying grammar and flashcard drills.</p>
 
-        <p>I have a tonne of respect for Steve, but the issues with using the LingQ approach for me from day one were:</p>
+        <p>I have a tonne of respect for Steve, but the issues with using the LingQ approach for me are:</p>
 
         <ol>
-            <li><strong>Lack of feeling of progression:</strong> After the initial buzz fades of learning my first 100 words in a language, I felt lost in LingQ's sea of unstructured content. Learning a language is a very long journey - it can take up to <a href="https://www.fsi-language-courses.org/blog/fsi-language-difficulty/" target="_blank">2200 hours to master a language like Arabic or Mandarin</a>. Personally, I need tangible, short and medium term milestones to keep me on track for such a long journey.</li>
-            <li><strong>Inefficient:</strong> Steve often says that he avoids flashcards simply because he does not enjoy them, and if he is constantly forcing himself to do something he does not enjoy, it will interfere with his long term commitment to that language. That is a totally fair position. I feel differently, and I am willing to accept a bit more grinding for more efficient vocabulary acquisition.</li>
+            <li><strong>Lack of feeling of progression:</strong> After the initial buzz fades from learning my first 100
+                words, I felt lost in LingQ's sea of unstructured content. Learning a language is a very long journey -
+                it can take up to <a href="https://www.fsi-language-courses.org/blog/fsi-language-difficulty/"
+                    target="_blank">2200 hours to master a language like Arabic or Mandarin</a>. Personally, I need
+                tangible, short and medium term milestones to keep me on track for such a long journey.</li>
+            <li><strong>Inefficient:</strong> Steve often says that he avoids flashcards simply because he does not
+                enjoy them, and if he is constantly forcing himself to do something he does not enjoy, it will interfere
+                with his long term commitment to that language. That is a totally fair position. I feel differently, and
+                I am willing to accept a bit more grinding in return for more efficient vocabulary acquisition.</li>
         </ol>
 
-        <p>Mabbuul guides users through a curated series of stories that cover all the vocabulary that students are expected to know for a <a href="https://cvc.cervantes.es/ensenanza/biblioteca_ele/plan_curricular/niveles/09_nociones_especificas_inventario_a1-a2.htm" target="_blank">CEFR level</a>. After a student finishes a story, all of the words from that story are added to a flashcard deck that must be maintained before a student can access other stories. So, a student experiences the vocabulary initially in context, but is then required to recall the vocabulary from that story at an optimal delay. After a student completes a level on Mabbuul, they can be confident that they have mastered the vocabulary they need for a professionally recognised exam. They will need to supplement Mabbuul with some output practice (speaking, writing), but this should come fairly quickly to them.</p>
+        <p>Mabbuul guides users through a curated series of stories that cover all the vocabulary that students are
+            expected to know for a <a
+                href="https://cvc.cervantes.es/ensenanza/biblioteca_ele/plan_curricular/niveles/09_nociones_especificas_inventario_a1-a2.htm"
+                target="_blank">CEFR level</a>. After a student finishes a story, all of the words from that story are
+            added to a flashcard deck that must be maintained before a student can access other stories. So, a student
+            experiences the vocabulary initially in context, but is then required to recall the vocabulary from that
+            story at an optimal delay. After a student completes a level on Mabbuul, they can be confident that they
+            have mastered the vocabulary they need for a professionally recognised exam. They will need to supplement
+            Mabbuul with some output practice (speaking, writing), but this should come fairly quickly to them.</p>
     </main>
 
     <footer>
         © 2026 Jack Whooley. All rights reserved.
     </footer>
+    <script>
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('site-nav').classList.toggle('open');
+        });
+    </script>
 </body>
+
 </html>

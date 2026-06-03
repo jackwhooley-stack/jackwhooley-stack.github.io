@@ -206,10 +206,67 @@
             color: #666;
         }
         
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+            padding: 5px;
+            color: #000;
+        }
+        
         /* Responsive design for tablets and mobile */
         @media (max-width: 768px) {
             body {
                 padding: 30px 15px;
+            }
+            
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 25px;
+                position: relative;
+                flex-wrap: wrap;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            nav {
+                display: none; /* Hidden by default */
+                width: 100%;
+                flex-direction: column;
+                margin-top: 15px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            
+            nav.open {
+                display: flex;
+            }
+            
+            nav a {
+                display: block;
+                padding: 12px 0;
+                margin-right: 0;
+                font-size: 1.05rem;
+                border-bottom: 1px solid #f5f5f5;
+            }
+            
+            nav a:last-child {
+                border-bottom: none;
+            }
+            
+            nav span {
+                display: none; /* Hide dots on mobile */
             }
             
             .languages-container {
@@ -243,10 +300,17 @@
             .step {
                 min-height: 50vh;
                 margin-bottom: 40px;
+                text-align: center; /* Center-align text on mobile */
             }
             
             .step h2 {
                 font-size: 1.8rem;
+            }
+            
+            .arabic-text {
+                text-align: center; /* Center-align Arabic text on mobile */
+                border-right: none;
+                padding-right: 0;
             }
         }
     </style>
@@ -254,7 +318,8 @@
 <body class="languages-page">
     <header>
         <h1><a href="index.html">Jack Whooley</a></h1>
-        <nav>
+        <button id="menu-toggle" class="menu-toggle" aria-label="Toggle Menu">☰</button>
+        <nav id="site-nav">
             <a href="index.html">home</a>
             <span>·</span>
             <a href="about.html">about</a>
@@ -555,6 +620,11 @@
             // Run on load and register listener
             handleScroll();
             window.addEventListener("scroll", handleScroll);
+
+            // Collapsible mobile nav menu listener
+            document.getElementById('menu-toggle').addEventListener('click', function() {
+                document.getElementById('site-nav').classList.toggle('open');
+            });
         }
     </script>
 </body>
