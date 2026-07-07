@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxi Duration Model - Jack Whooley</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #000;
+        }
+
+        h1 a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        nav {
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        nav a {
+            color: #333;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover,
+        a:hover {
+            text-decoration: underline;
+        }
+
+        nav span {
+            color: #999;
+            margin: 0 5px;
+        }
+
+        main {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 18px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        p {
+            margin-bottom: 18px;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .intro {
+            margin-bottom: 28px;
+        }
+
+        .panel {
+            border: 1px solid #e5e5e5;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 22px;
+            background: #fbfbfb;
+        }
+
+        .panel h3 {
+            font-size: 1.05rem;
+            margin-bottom: 14px;
+            color: #000;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .field {
+            margin-bottom: 12px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-size: 0.92rem;
+            color: #444;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d7d7d7;
+            border-radius: 10px;
+            font-size: 0.98rem;
+            background: #fff;
+        }
+
+        button {
+            appearance: none;
+            border: 1px solid #0f172a;
+            background: #0f172a;
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 999px;
+            font-size: 0.96rem;
+            cursor: pointer;
+        }
+
+        button.secondary {
+            background: #fff;
+            color: #0f172a;
+            border-color: #d0d0d0;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .samples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .sample {
+            border-radius: 999px;
+            border: 1px solid #d8d8d8;
+            background: #fff;
+            color: #333;
+            padding: 9px 12px;
+            font-size: 0.9rem;
+        }
+
+        .result-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 18px;
+            padding: 24px;
+            background: linear-gradient(180deg, #ffffff, #f8fafc);
+        }
+
+        .result-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .result-number {
+            font-size: clamp(2.8rem, 6vw, 4.4rem);
+            line-height: 0.95;
+            color: #000;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+        }
+
+        .pill {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 8px 11px;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: #eef3f8;
+            color: #0f172a;
+        }
+
+        .subtle {
+            color: #6b7280;
+            font-size: 0.93rem;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .meta {
+            padding-top: 12px;
+            border-top: 1px solid #ebebeb;
+        }
+
+        .meta strong {
+            display: block;
+            color: #111;
+            font-size: 0.92rem;
+            margin-bottom: 4px;
+        }
+
+        .status {
+            margin-top: 12px;
+            min-height: 22px;
+            color: #6b7280;
+            font-size: 0.92rem;
+        }
+
+        .error {
+            color: #a61b1b;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+            padding: 5px;
+            color: #000;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 30px 15px;
+            }
+
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 25px;
+                position: relative;
+                flex-wrap: wrap;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                margin-top: 15px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            nav.open {
+                display: flex;
+            }
+
+            nav a {
+                display: block;
+                padding: 12px 0;
+                margin-right: 0;
+                font-size: 1.05rem;
+                border-bottom: 1px solid #f5f5f5;
+            }
+
+            nav a:last-child {
+                border-bottom: none;
+            }
+
+            nav span {
+                display: none;
+            }
+
+            .grid,
+            .meta-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-top {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Jack Whooley</a></h1>
+        <button id="menu-toggle" class="menu-toggle" aria-label="Toggle Menu">☰</button>
+        <nav id="site-nav">
+            <a href="index.html">home</a>
+            <span>·</span>
+            <a href="about.html">about</a>
+            <span>·</span>
+            <a href="projects.html">projects</a>
+            <span>·</span>
+            <a href="mathematics.html">mathematics</a>
+            <span>·</span>
+            <a href="languages.html">languages</a>
+            <span>·</span>
+            <a href="https://github.com/jackwhooley-stack" target="_blank">github</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>NYC taxi duration estimator</h2>
+        <p class="intro">This page calls a live model deployed on Google Cloud Run. Give it a pickup time and a pair of TLC zone IDs and it will estimate trip duration, uncertainty range and expected dropoff time.</p>
+
+        <section class="panel">
+            <h3>Quick presets</h3>
+            <p>Use one of these sample trips or enter your own inputs below.</p>
+            <div class="samples">
+                <button class="sample" type="button" data-datetime="2023-01-17T09:30" data-pickup="161" data-dropoff="234" data-passengers="1">Midtown to Union Square</button>
+                <button class="sample" type="button" data-datetime="2023-01-18T17:30" data-pickup="132" data-dropoff="161" data-passengers="1">JFK to Midtown</button>
+                <button class="sample" type="button" data-datetime="2023-01-21T22:15" data-pickup="249" data-dropoff="79" data-passengers="2">Battery Park to East Village</button>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h3>Estimate a ride</h3>
+            <form id="taxi-form">
+                <div class="grid">
+                    <div class="field full">
+                        <label for="pickup_datetime">Pickup date and time</label>
+                        <input id="pickup_datetime" name="pickup_datetime" type="datetime-local" required value="2023-01-17T09:30">
+                    </div>
+                    <div class="field">
+                        <label for="pickup_zone_id">Pickup zone ID</label>
+                        <input id="pickup_zone_id" name="pickup_zone_id" type="number" min="1" max="265" required value="161">
+                    </div>
+                    <div class="field">
+                        <label for="dropoff_zone_id">Dropoff zone ID</label>
+                        <input id="dropoff_zone_id" name="dropoff_zone_id" type="number" min="1" max="265" required value="234">
+                    </div>
+                    <div class="field">
+                        <label for="passenger_count">Passengers</label>
+                        <input id="passenger_count" name="passenger_count" type="number" min="1" max="6" required value="1">
+                    </div>
+                    <div class="field">
+                        <label for="vendor_id">Vendor ID</label>
+                        <input id="vendor_id" name="vendor_id" type="number" min="1" max="2" required value="1">
+                    </div>
+                    <div class="field full">
+                        <label for="rate_code_id">Rate code ID</label>
+                        <input id="rate_code_id" name="rate_code_id" type="number" min="1" max="6" required value="1">
+                    </div>
+                </div>
+                <div class="actions">
+                    <button type="submit">Estimate trip time</button>
+                    <button class="secondary" id="reset-form" type="button">Reset</button>
+                </div>
+            </form>
+            <div class="status" id="form-status"></div>
+        </section>
+
+        <section class="result-card" aria-live="polite">
+            <div class="result-top">
+                <div>
+                    <div class="subtle">Predicted trip time</div>
+                    <div class="result-number" id="result-minutes">--</div>
+                </div>
+                <div class="pill" id="result-confidence">waiting for input</div>
+            </div>
+            <p id="result-summary">Use the form above to request a live estimate from the deployed model.</p>
+            <div class="meta-grid">
+                <div class="meta">
+                    <strong>Estimated dropoff</strong>
+                    <span id="result-dropoff">--</span>
+                </div>
+                <div class="meta">
+                    <strong>Prediction range</strong>
+                    <span id="result-range">--</span>
+                </div>
+                <div class="meta">
+                    <strong>Requests remaining today</strong>
+                    <span id="result-remaining">20</span>
+                </div>
+                <div class="meta">
+                    <strong>Model</strong>
+                    <span id="result-model">--</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        © 2026 Jack Whooley. All rights reserved.
+    </footer>
+
+    <script>
+        const apiBaseUrl = 'https://taxi-duration-api-795851368163.europe-west2.run.app';
+        const form = document.getElementById('taxi-form');
+        const statusEl = document.getElementById('form-status');
+        const resultMinutes = document.getElementById('result-minutes');
+        const resultConfidence = document.getElementById('result-confidence');
+        const resultSummary = document.getElementById('result-summary');
+        const resultDropoff = document.getElementById('result-dropoff');
+        const resultRange = document.getElementById('result-range');
+        const resultRemaining = document.getElementById('result-remaining');
+        const resultModel = document.getElementById('result-model');
+
+        function toApiDatetime(value) {
+            return `${value.replace('T', ' ')}:00`;
+        }
+
+        function setPreset(button) {
+            document.getElementById('pickup_datetime').value = button.dataset.datetime;
+            document.getElementById('pickup_zone_id').value = button.dataset.pickup;
+            document.getElementById('dropoff_zone_id').value = button.dataset.dropoff;
+            document.getElementById('passenger_count').value = button.dataset.passengers;
+        }
+
+        function updateResult(payload) {
+            resultMinutes.textContent = `${payload.predicted_duration_minutes} min`;
+            resultConfidence.textContent = `${payload.confidence} confidence`;
+            resultSummary.textContent = `This estimate was generated from the live API and uses ${payload.features_used} engineered features.`;
+            resultDropoff.textContent = new Date(payload.estimated_dropoff_datetime).toLocaleString();
+            resultRange.textContent = `${payload.prediction_interval_minutes.low} to ${payload.prediction_interval_minutes.high} minutes`;
+            resultRemaining.textContent = `${payload.remaining_requests_today} of ${payload.daily_request_limit} remaining`;
+            resultModel.textContent = payload.model_version;
+        }
+
+        document.querySelectorAll('.sample').forEach((button) => {
+            button.addEventListener('click', () => setPreset(button));
+        });
+
+        document.getElementById('reset-form').addEventListener('click', () => {
+            form.reset();
+            document.getElementById('pickup_datetime').value = '2023-01-17T09:30';
+            document.getElementById('pickup_zone_id').value = '161';
+            document.getElementById('dropoff_zone_id').value = '234';
+            document.getElementById('passenger_count').value = '1';
+            document.getElementById('vendor_id').value = '1';
+            document.getElementById('rate_code_id').value = '1';
+            statusEl.textContent = '';
+            statusEl.classList.remove('error');
+        });
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            statusEl.textContent = 'Requesting live estimate...';
+            statusEl.classList.remove('error');
+
+            const payload = {
+                pickup_datetime: toApiDatetime(document.getElementById('pickup_datetime').value),
+                pickup_zone_id: Number(document.getElementById('pickup_zone_id').value),
+                dropoff_zone_id: Number(document.getElementById('dropoff_zone_id').value),
+                passenger_count: Number(document.getElementById('passenger_count').value),
+                vendor_id: Number(document.getElementById('vendor_id').value),
+                rate_code_id: Number(document.getElementById('rate_code_id').value),
+            };
+
+            try {
+                const response = await fetch(`${apiBaseUrl}/predict`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+
+                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error(result.detail || 'Prediction request failed.');
+                }
+
+                updateResult(result);
+                statusEl.textContent = 'Estimate updated.';
+            } catch (error) {
+                statusEl.textContent = error.message;
+                statusEl.classList.add('error');
+            }
+        });
+
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('site-nav').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>
