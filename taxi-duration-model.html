@@ -389,37 +389,56 @@
 
         .route-aura {
             fill: none;
-            stroke: rgba(255, 143, 189, 0.2);
-            stroke-width: 1.7px;
+            stroke: rgba(255, 143, 189, 0.28);
+            stroke-width: 1.15px;
             stroke-linecap: round;
             stroke-linejoin: round;
             opacity: 0;
-            filter: blur(1px);
+            filter: blur(0.4px);
             transition: opacity 0.2s ease;
         }
 
-        .route-line {
+        .route-base {
             fill: none;
-            stroke: url(#route-flow-gradient);
-            stroke-width: 0.64px;
+            stroke: rgba(255, 162, 198, 0.28);
+            stroke-width: 0.72px;
             stroke-linecap: round;
             stroke-linejoin: round;
-            stroke-dasharray: 4 7;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .route-pulse {
+            fill: none;
+            stroke: url(#route-flow-gradient);
+            stroke-width: 1.05px;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 34 180;
             opacity: 0;
             transition: opacity 0.2s ease;
         }
 
         .route-aura.active,
-        .route-line.active {
+        .route-base.active,
+        .route-pulse.active {
             opacity: 1;
         }
 
-        .route-line.flowing {
-            animation: route-pulse 2.6s linear infinite;
+        .route-aura.base-visible {
+            opacity: 0.42;
+        }
+
+        .route-base.base-visible {
+            opacity: 0.16;
+        }
+
+        .route-pulse.flowing {
+            animation: route-pulse 1.95s linear infinite;
         }
 
         .route-aura.flowing {
-            animation: route-aura-pulse 2.6s ease-in-out infinite;
+            animation: route-aura-pulse 1.95s ease-in-out infinite;
         }
 
         @keyframes pickup-heartbeat {
@@ -475,40 +494,71 @@
 
         @keyframes route-pulse {
             0% {
-                stroke-dashoffset: 22;
-                filter: drop-shadow(0 0 0 rgba(255, 143, 189, 0));
-            }
-
-            18% {
-                stroke-dashoffset: 22;
-                filter: drop-shadow(0 0 0 rgba(255, 143, 189, 0));
-            }
-
-            72% {
                 stroke-dashoffset: 0;
-                filter: drop-shadow(0 0 2px rgba(255, 143, 189, 0.35));
+                opacity: 0.12;
+                filter: drop-shadow(0 0 0 rgba(255, 143, 189, 0));
+            }
+
+            8% {
+                opacity: 1;
+                filter: drop-shadow(0 0 2px rgba(255, 143, 189, 0.45));
+            }
+
+            36% {
+                stroke-dashoffset: -178;
+                opacity: 0.92;
+                filter: drop-shadow(0 0 2px rgba(255, 211, 122, 0.34));
+            }
+
+            44% {
+                stroke-dashoffset: -178;
+                opacity: 0.06;
+                filter: drop-shadow(0 0 0 rgba(255, 211, 122, 0));
+            }
+
+            56% {
+                stroke-dashoffset: 0;
+                opacity: 0.12;
+                filter: drop-shadow(0 0 0 rgba(255, 143, 189, 0));
+            }
+
+            64% {
+                opacity: 0.96;
+                filter: drop-shadow(0 0 2px rgba(255, 143, 189, 0.42));
+            }
+
+            92% {
+                stroke-dashoffset: -178;
+                opacity: 0.88;
+                filter: drop-shadow(0 0 2px rgba(255, 211, 122, 0.3));
             }
 
             100% {
-                stroke-dashoffset: -22;
-                filter: drop-shadow(0 0 1px rgba(255, 211, 122, 0.08));
+                stroke-dashoffset: -178;
+                opacity: 0;
+                filter: drop-shadow(0 0 0 rgba(255, 211, 122, 0));
             }
         }
 
         @keyframes route-aura-pulse {
-            0%, 18%, 100% {
-                stroke: rgba(255, 143, 189, 0.12);
-                opacity: 0.12;
+            0%, 100% {
+                stroke: rgba(255, 143, 189, 0.14);
+                opacity: 0.14;
             }
 
-            42% {
-                stroke: rgba(255, 143, 189, 0.28);
-                opacity: 0.28;
+            8%, 64% {
+                stroke: rgba(255, 143, 189, 0.34);
+                opacity: 0.34;
             }
 
-            72% {
-                stroke: rgba(255, 211, 122, 0.22);
+            36%, 92% {
+                stroke: rgba(255, 211, 122, 0.24);
                 opacity: 0.22;
+            }
+
+            44%, 100% {
+                stroke: rgba(255, 143, 189, 0.08);
+                opacity: 0.08;
             }
         }
 
@@ -738,7 +788,8 @@
                             <g id="zone-areas"></g>
                             <g id="route-overlay">
                                 <path id="route-aura" class="route-aura" d=""></path>
-                                <path id="route-line" class="route-line" d=""></path>
+                                <path id="route-base" class="route-base" d=""></path>
+                                <path id="route-pulse" class="route-pulse" d=""></path>
                             </g>
                         </svg>
                     </div>
@@ -773,7 +824,8 @@
         const mapSvg = document.getElementById('taxi-map');
         const zoneAreas = document.getElementById('zone-areas');
         const routeAura = document.getElementById('route-aura');
-        const routeLine = document.getElementById('route-line');
+        const routeBase = document.getElementById('route-base');
+        const routePulse = document.getElementById('route-pulse');
 
         const fallbackZones = [
             { id: 161, borough: 'Manhattan', label: 'Midtown Center' },
@@ -819,11 +871,15 @@
 
         function clearRoute() {
             routeAura.setAttribute('d', '');
-            routeLine.setAttribute('d', '');
+            routeBase.setAttribute('d', '');
+            routePulse.setAttribute('d', '');
             routeAura.classList.remove('active');
-            routeLine.classList.remove('active');
+            routeAura.classList.remove('base-visible');
+            routeBase.classList.remove('active');
+            routeBase.classList.remove('base-visible');
+            routePulse.classList.remove('active');
             routeAura.classList.remove('flowing');
-            routeLine.classList.remove('flowing');
+            routePulse.classList.remove('flowing');
             animateMapViewBox(defaultMapViewBox, 1000);
         }
 
@@ -1145,11 +1201,15 @@
             if (pickupFeature && dropoffFeature && pickupFeature.id !== dropoffFeature.id) {
                 const path = routePath(pickupFeature.centroid, dropoffFeature.centroid);
                 routeAura.setAttribute('d', path);
-                routeLine.setAttribute('d', path);
+                routeBase.setAttribute('d', path);
+                routePulse.setAttribute('d', path);
                 routeAura.classList.add('active');
-                routeLine.classList.add('active');
+                routeAura.classList.add('base-visible');
+                routeBase.classList.add('active');
+                routeBase.classList.add('base-visible');
+                routePulse.classList.add('active');
                 routeAura.classList.add('flowing');
-                routeLine.classList.add('flowing');
+                routePulse.classList.add('flowing');
             } else {
                 clearRoute();
             }
