@@ -311,18 +311,18 @@
         }
 
         .pickup-swatch {
-            background: #dfeff3;
-            border-color: #236f87;
+            background: #ffd9ec;
+            border-color: #d85c96;
         }
 
         .dropoff-swatch {
-            background: #f7e4c5;
-            border-color: #c67a13;
+            background: #ffe7bf;
+            border-color: #dd9c2d;
         }
 
         .route-swatch {
             width: 18px;
-            background: linear-gradient(90deg, #236f87, #c67a13);
+            background: linear-gradient(90deg, #ff8fbd, #ffd37a);
         }
 
         .map-shell {
@@ -333,6 +333,10 @@
             width: 100%;
             height: auto;
             display: block;
+        }
+
+        .map-status {
+            margin-top: 12px;
         }
 
         .borough-shape {
@@ -352,81 +356,160 @@
         }
 
         .zone-area {
-            fill: transparent;
-            stroke: transparent;
+            fill: #fbfaf6;
+            stroke: #7a7f8e;
+            stroke-width: 0.85px;
+            stroke-linejoin: round;
+            stroke-linecap: round;
             transition: fill 0.2s ease, stroke 0.2s ease, opacity 0.2s ease;
             opacity: 0.9;
+            filter: url(#sketch-filter);
         }
 
         .zone-area.pickup {
-            fill: #dfeff3;
-            stroke: #236f87;
+            fill: #ffd9ec;
+            stroke: #d85c96;
             stroke-width: 1.6px;
+            animation: pickup-heartbeat 2.6s ease-in-out infinite;
         }
 
         .zone-area.dropoff {
-            fill: #f7e4c5;
-            stroke: #c67a13;
+            fill: #ffe7bf;
+            stroke: #dd9c2d;
             stroke-width: 1.6px;
+            animation: dropoff-heartbeat 2.6s ease-in-out infinite;
         }
 
         .zone-area.both {
-            fill: #ece2d8;
-            stroke: #7c4a2f;
+            fill: #ffd6d6;
+            stroke: #d56a8e;
             stroke-width: 1.6px;
+            animation: shared-heartbeat 2.6s ease-in-out infinite;
         }
 
-        .zone-node circle {
-            fill: #fff;
-            stroke: #333;
-            stroke-width: 1.4px;
-        }
-
-        .zone-node text {
-            fill: #111;
-            font-size: 10px;
-        }
-
-        .zone-node.pickup circle {
-            fill: #dfeff3;
-            stroke: #236f87;
-            stroke-width: 2.5px;
-        }
-
-        .zone-node.dropoff circle {
-            fill: #f7e4c5;
-            stroke: #c67a13;
-            stroke-width: 2.5px;
-        }
-
-        .zone-node.both circle {
-            fill: #ece2d8;
-            stroke: #7c4a2f;
-            stroke-width: 2.5px;
-        }
-
-        .route-shadow {
+        .route-aura {
             fill: none;
-            stroke: rgba(255, 255, 255, 0.92);
-            stroke-width: 7px;
+            stroke: rgba(255, 143, 189, 0.2);
+            stroke-width: 1.7px;
             stroke-linecap: round;
+            stroke-linejoin: round;
             opacity: 0;
+            filter: blur(1px);
             transition: opacity 0.2s ease;
         }
 
         .route-line {
             fill: none;
-            stroke: #0f172a;
-            stroke-width: 2.6px;
+            stroke: url(#route-flow-gradient);
+            stroke-width: 0.64px;
             stroke-linecap: round;
-            stroke-dasharray: 6 6;
+            stroke-linejoin: round;
+            stroke-dasharray: 4 7;
             opacity: 0;
             transition: opacity 0.2s ease;
         }
 
-        .route-shadow.active,
+        .route-aura.active,
         .route-line.active {
             opacity: 1;
+        }
+
+        .route-line.flowing {
+            animation: route-pulse 2.6s linear infinite;
+        }
+
+        .route-aura.flowing {
+            animation: route-aura-pulse 2.6s ease-in-out infinite;
+        }
+
+        @keyframes pickup-heartbeat {
+            0%, 16%, 100% {
+                fill: #ffd9ec;
+                stroke: #d85c96;
+            }
+
+            8%, 12% {
+                fill: #ff8fbd;
+                stroke: #c93f7c;
+            }
+
+            22%, 72% {
+                fill: #ffd9ec;
+                stroke: #d85c96;
+            }
+        }
+
+        @keyframes dropoff-heartbeat {
+            0%, 72% {
+                fill: #ffe7bf;
+                stroke: #dd9c2d;
+            }
+
+            82%, 88% {
+                fill: #ffd37a;
+                stroke: #c98312;
+            }
+
+            100% {
+                fill: #ffe7bf;
+                stroke: #dd9c2d;
+            }
+        }
+
+        @keyframes shared-heartbeat {
+            0%, 100% {
+                fill: #ffd6d6;
+                stroke: #d56a8e;
+            }
+
+            12%, 22%, 82%, 92% {
+                fill: #ffafc8;
+                stroke: #c6497a;
+            }
+
+            48%, 60% {
+                fill: #ffc07e;
+                stroke: #d08416;
+            }
+        }
+
+        @keyframes route-pulse {
+            0% {
+                stroke-dashoffset: 22;
+                filter: drop-shadow(0 0 0 rgba(255, 143, 189, 0));
+            }
+
+            18% {
+                stroke-dashoffset: 22;
+                filter: drop-shadow(0 0 0 rgba(255, 143, 189, 0));
+            }
+
+            72% {
+                stroke-dashoffset: 0;
+                filter: drop-shadow(0 0 2px rgba(255, 143, 189, 0.35));
+            }
+
+            100% {
+                stroke-dashoffset: -22;
+                filter: drop-shadow(0 0 1px rgba(255, 211, 122, 0.08));
+            }
+        }
+
+        @keyframes route-aura-pulse {
+            0%, 18%, 100% {
+                stroke: rgba(255, 143, 189, 0.12);
+                opacity: 0.12;
+            }
+
+            42% {
+                stroke: rgba(255, 143, 189, 0.28);
+                opacity: 0.28;
+            }
+
+            72% {
+                stroke: rgba(255, 211, 122, 0.22);
+                opacity: 0.22;
+            }
         }
 
         .error {
@@ -633,49 +716,33 @@
 
             <aside class="map-column">
                 <section class="map-panel">
-                    <h3>NYC zone sketch</h3>
-                    <p>The map uses the same pencil-sketch direction as the languages page, while shading the selected pickup and dropoff zones and drawing a route line after you submit.</p>
+                    <h3>NYC taxi zones</h3>
+                    <p>This map now loads the official TLC taxi-zone shapefile and shades the actual pickup and dropoff polygons instead of a hand-drawn sketch.</p>
                     <div class="legend">
                         <span><i class="swatch pickup-swatch"></i>Pickup</span>
                         <span><i class="swatch dropoff-swatch"></i>Dropoff</span>
                         <span><i class="swatch route-swatch"></i>Route</span>
                     </div>
                     <div class="map-shell">
-                        <svg viewBox="0 0 500 620" role="img" aria-label="Sketch map of New York City boroughs with highlighted taxi zones">
+                        <svg id="taxi-map" viewBox="0 0 500 620" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Map of official New York City taxi zones with highlighted pickup and dropoff polygons">
                             <defs>
                                 <filter id="sketch-filter" x="-20%" y="-20%" width="140%" height="140%">
                                     <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
                                     <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
                                 </filter>
-                                <pattern id="pickup-pattern" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                                    <rect width="6" height="6" fill="#f5fbfd" />
-                                    <line x1="0" y1="0" x2="0" y2="6" stroke="#236f87" stroke-width="0.7" />
-                                </pattern>
-                                <pattern id="dropoff-pattern" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                                    <rect width="6" height="6" fill="#fffaf3" />
-                                    <line x1="0" y1="0" x2="0" y2="6" stroke="#c67a13" stroke-width="0.7" />
-                                </pattern>
+                                <linearGradient id="route-flow-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#ff8fbd"></stop>
+                                    <stop offset="100%" stop-color="#ffd37a"></stop>
+                                </linearGradient>
                             </defs>
-                            <g>
-                                <path class="borough-shape" d="M293 58c22-15 50-10 67 8 10 10 16 25 15 42-1 19 7 44 22 72 7 14 11 25 7 35-6 13-22 15-40 18-20 3-37 11-46 23-12 16-14 38-28 48-14 10-35 8-49-5-16-13-23-35-21-58 2-14 7-28 4-38-2-13-14-25-22-39-8-14-11-33-3-48 12-21 58-23 94-42z" />
-                                <path class="borough-shape" d="M156 247c18-15 38-22 59-20 22 2 39 13 51 30 9 13 13 28 11 42-3 13-12 24-26 32-17 9-37 11-52 23-15 11-26 31-43 34-21 4-43-10-53-32-9-22-6-50 8-71 11-16 25-26 45-38z" />
-                                <path class="borough-shape" d="M92 322c22-14 52-13 73 2 18 13 29 33 28 54-2 25-19 42-31 61-9 15-10 37-25 47-18 13-45 8-65-8-20-16-33-43-29-68 3-24 19-42 25-62 3-10 9-18 24-26z" />
-                                <path class="borough-shape" d="M187 433c29-20 69-26 107-18 40 9 75 32 84 63 7 21 0 46-19 61-24 19-61 21-92 17-36-3-69-15-97-37-23-18-38-44-32-63 7-21 26-31 49-23z" />
-                                <path class="borough-shape" d="M353 391c16-12 38-16 59-9 26 8 48 32 51 60 2 28-15 56-38 71-22 14-49 17-71 8-21-8-37-29-39-53-1-18 7-36 17-51 8-11 11-19 21-26z" />
-                            </g>
-                            <g>
-                                <text class="borough-label" x="315" y="78">Manhattan</text>
-                                <text class="borough-label" x="136" y="230">Queens</text>
-                                <text class="borough-label" x="68" y="302">Brooklyn</text>
-                                <text class="borough-label" x="203" y="418">Bronx</text>
-                                <text class="borough-label" x="360" y="378">Staten Island</text>
-                            </g>
-                            <path id="route-shadow" class="route-shadow" d=""></path>
-                            <path id="route-line" class="route-line" d=""></path>
                             <g id="zone-areas"></g>
-                            <g id="zone-nodes"></g>
+                            <g id="route-overlay">
+                                <path id="route-aura" class="route-aura" d=""></path>
+                                <path id="route-line" class="route-line" d=""></path>
+                            </g>
                         </svg>
                     </div>
+                    <div id="map-status" class="subtle map-status">Loading official TLC taxi zone boundaries...</div>
                 </section>
             </aside>
         </div>
@@ -685,8 +752,12 @@
         © 2026 Jack Whooley. All rights reserved.
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/shpjs@6.2.0/dist/shp.min.js"></script>
     <script>
         const apiBaseUrl = 'https://taxi-duration-api-795851368163.europe-west2.run.app';
+        const taxiZoneDataUrl = 'taxi_zones.zip';
+        const mapDimensions = { width: 500, height: 620, padding: 24 };
+        const defaultMapViewBox = `0 0 ${mapDimensions.width} ${mapDimensions.height}`;
         const form = document.getElementById('taxi-form');
         const statusEl = document.getElementById('form-status');
         const resultMinutes = document.getElementById('result-minutes');
@@ -698,63 +769,363 @@
         const resultModel = document.getElementById('result-model');
         const pickupSelect = document.getElementById('pickup_zone_id');
         const dropoffSelect = document.getElementById('dropoff_zone_id');
+        const mapStatus = document.getElementById('map-status');
+        const mapSvg = document.getElementById('taxi-map');
         const zoneAreas = document.getElementById('zone-areas');
-        const zoneNodes = document.getElementById('zone-nodes');
-        const routeShadow = document.getElementById('route-shadow');
+        const routeAura = document.getElementById('route-aura');
         const routeLine = document.getElementById('route-line');
 
-        const zones = [
-            { id: 161, borough: 'Manhattan', label: 'Midtown Center', x: 286, y: 134, area: 'M 272 122 L 294 118 L 302 136 L 294 154 L 272 149 L 264 136 Z' },
-            { id: 162, borough: 'Manhattan', label: 'Midtown East', x: 313, y: 128, area: 'M 302 116 L 324 112 L 333 131 L 323 147 L 302 143 L 295 127 Z' },
-            { id: 163, borough: 'Manhattan', label: 'Midtown North', x: 299, y: 103, area: 'M 286 91 L 309 87 L 318 104 L 308 121 L 287 116 L 280 101 Z' },
-            { id: 164, borough: 'Manhattan', label: 'Penn Station', x: 269, y: 154, area: 'M 256 143 L 278 140 L 287 156 L 278 174 L 255 168 L 248 154 Z' },
-            { id: 230, borough: 'Manhattan', label: 'Times Square', x: 278, y: 121, area: 'M 266 109 L 286 106 L 294 122 L 286 138 L 266 134 L 260 121 Z' },
-            { id: 233, borough: 'Manhattan', label: 'UN Plaza', x: 329, y: 150, area: 'M 316 139 L 337 135 L 345 151 L 336 168 L 316 164 L 309 150 Z' },
-            { id: 234, borough: 'Manhattan', label: 'Flatiron', x: 258, y: 183, area: 'M 245 171 L 268 168 L 276 185 L 267 202 L 245 197 L 238 183 Z' },
-            { id: 236, borough: 'Manhattan', label: 'Upper East Side', x: 323, y: 95, area: 'M 311 83 L 333 80 L 341 96 L 332 113 L 310 108 L 304 95 Z' },
-            { id: 237, borough: 'Manhattan', label: 'Upper East', x: 311, y: 76, area: 'M 299 64 L 320 60 L 328 77 L 319 93 L 298 88 L 291 75 Z' },
-            { id: 238, borough: 'Manhattan', label: 'Upper West Side', x: 274, y: 82, area: 'M 261 70 L 283 66 L 291 83 L 282 100 L 261 95 L 254 81 Z' },
-            { id: 239, borough: 'Manhattan', label: 'West Harlem', x: 258, y: 60, area: 'M 246 48 L 268 44 L 277 60 L 268 77 L 245 71 L 239 58 Z' },
-            { id: 249, borough: 'Manhattan', label: 'Battery Park', x: 236, y: 217, area: 'M 223 206 L 244 202 L 253 218 L 243 235 L 222 229 L 216 216 Z' },
-            { id: 79, borough: 'Manhattan', label: 'East Village', x: 286, y: 201, area: 'M 273 190 L 295 186 L 303 202 L 294 220 L 272 214 L 265 200 Z' },
-            { id: 48, borough: 'Manhattan', label: "Hell's Kitchen", x: 245, y: 132, area: 'M 232 120 L 254 117 L 262 133 L 253 150 L 231 144 L 225 131 Z' },
-            { id: 132, borough: 'Queens', label: 'JFK Airport', x: 149, y: 310, area: 'M 132 294 L 159 291 L 169 312 L 158 333 L 131 327 L 122 309 Z' },
-            { id: 138, borough: 'Queens', label: 'LaGuardia Airport', x: 198, y: 258, area: 'M 184 245 L 207 242 L 216 259 L 206 277 L 183 271 L 176 258 Z' },
-            { id: 68, borough: 'Brooklyn', label: 'Williamsburg', x: 145, y: 348, area: 'M 132 336 L 154 333 L 163 349 L 154 367 L 132 361 L 125 347 Z' },
-            { id: 61, borough: 'Brooklyn', label: 'Park Slope', x: 114, y: 404, area: 'M 101 392 L 123 389 L 132 405 L 123 423 L 101 417 L 94 404 Z' },
-            { id: 4, borough: 'Manhattan', label: 'Financial District', x: 223, y: 195, area: 'M 210 183 L 231 180 L 239 196 L 230 213 L 209 207 L 202 194 Z' },
-            { id: 1, borough: 'EWR', label: 'Newark Airport', x: 371, y: 471, area: 'M 358 459 L 380 456 L 388 472 L 379 490 L 357 484 L 350 471 Z' }
+        const fallbackZones = [
+            { id: 161, borough: 'Manhattan', label: 'Midtown Center' },
+            { id: 162, borough: 'Manhattan', label: 'Midtown East' },
+            { id: 163, borough: 'Manhattan', label: 'Midtown North' },
+            { id: 164, borough: 'Manhattan', label: 'Penn Station' },
+            { id: 230, borough: 'Manhattan', label: 'Times Sq/Theatre District' },
+            { id: 233, borough: 'Manhattan', label: 'UN/Turtle Bay South' },
+            { id: 234, borough: 'Manhattan', label: 'Union Sq' },
+            { id: 236, borough: 'Manhattan', label: 'Upper East Side North' },
+            { id: 237, borough: 'Manhattan', label: 'Upper East Side South' },
+            { id: 238, borough: 'Manhattan', label: 'Upper West Side North' },
+            { id: 239, borough: 'Manhattan', label: 'Upper West Side South' },
+            { id: 249, borough: 'Manhattan', label: 'West Village' },
+            { id: 79, borough: 'Manhattan', label: 'East Village' },
+            { id: 48, borough: 'Manhattan', label: "Clinton East" },
+            { id: 132, borough: 'Queens', label: 'JFK Airport' },
+            { id: 138, borough: 'Queens', label: 'LaGuardia Airport' },
+            { id: 68, borough: 'Brooklyn', label: 'East Williamsburg' },
+            { id: 61, borough: 'Brooklyn', label: 'Crown Heights North' },
+            { id: 4, borough: 'Manhattan', label: 'Alphabet City' },
+            { id: 1, borough: 'EWR', label: 'Newark Airport' }
         ];
 
-        const zoneMap = new Map(zones.map((zone) => [String(zone.id), zone]));
+        let zones = [...fallbackZones];
+        let zoneMap = new Map(zones.map((zone) => [String(zone.id), zone]));
+        let zoneFeaturesById = new Map();
+        let activeEstimateSelection = {
+            pickupId: '161',
+            dropoffId: '234',
+        };
+        let currentMapViewBox = [0, 0, mapDimensions.width, mapDimensions.height];
+        let mapViewBoxAnimationFrame = null;
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function clearRoute() {
+            routeAura.setAttribute('d', '');
+            routeLine.setAttribute('d', '');
+            routeAura.classList.remove('active');
+            routeLine.classList.remove('active');
+            routeAura.classList.remove('flowing');
+            routeLine.classList.remove('flowing');
+            animateMapViewBox(defaultMapViewBox, 1000);
+        }
+
+        function parseViewBox(value) {
+            return String(value).trim().split(/\s+/).map(Number);
+        }
+
+        function formatViewBox(values) {
+            return values.map((value) => value.toFixed(2)).join(' ');
+        }
+
+        function easeInOutCubic(t) {
+            return t < 0.5
+                ? 4 * t * t * t
+                : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        function animateMapViewBox(targetViewBox, duration = 1200) {
+            const startViewBox = [...currentMapViewBox];
+            const endViewBox = parseViewBox(targetViewBox);
+
+            if (startViewBox.every((value, index) => Math.abs(value - endViewBox[index]) < 0.01)) {
+                currentMapViewBox = endViewBox;
+                mapSvg.setAttribute('viewBox', formatViewBox(endViewBox));
+                return;
+            }
+
+            if (mapViewBoxAnimationFrame !== null) {
+                cancelAnimationFrame(mapViewBoxAnimationFrame);
+                mapViewBoxAnimationFrame = null;
+            }
+
+            const startedAt = performance.now();
+
+            function step(now) {
+                const elapsed = now - startedAt;
+                const progress = Math.min(elapsed / duration, 1);
+                const easedProgress = easeInOutCubic(progress);
+                const nextViewBox = startViewBox.map((value, index) => (
+                    value + ((endViewBox[index] - value) * easedProgress)
+                ));
+
+                currentMapViewBox = nextViewBox;
+                mapSvg.setAttribute('viewBox', formatViewBox(nextViewBox));
+
+                if (progress < 1) {
+                    mapViewBoxAnimationFrame = requestAnimationFrame(step);
+                } else {
+                    currentMapViewBox = endViewBox;
+                    mapSvg.setAttribute('viewBox', formatViewBox(endViewBox));
+                    mapViewBoxAnimationFrame = null;
+                }
+            }
+
+            mapViewBoxAnimationFrame = requestAnimationFrame(step);
+        }
+
+        function normalizeProperties(properties = {}) {
+            return Object.entries(properties).reduce((normalized, [key, value]) => {
+                normalized[String(key).toLowerCase()] = value;
+                return normalized;
+            }, {});
+        }
+
+        function getZoneProperty(properties, names) {
+            for (const name of names) {
+                if (properties[name] !== undefined && properties[name] !== null && properties[name] !== '') {
+                    return properties[name];
+                }
+            }
+            return null;
+        }
+
+        function flattenCollections(source) {
+            const collections = Array.isArray(source) ? source : [source];
+            return collections.flatMap((collection) => (
+                collection && collection.type === 'FeatureCollection' ? collection.features : []
+            ));
+        }
+
+        function collectCoordinates(geometry, bucket = []) {
+            if (!geometry || !geometry.coordinates) {
+                return bucket;
+            }
+
+            if (geometry.type === 'Polygon') {
+                geometry.coordinates.forEach((ring) => ring.forEach((coordinate) => bucket.push(coordinate)));
+            } else if (geometry.type === 'MultiPolygon') {
+                geometry.coordinates.forEach((polygon) => polygon.forEach((ring) => ring.forEach((coordinate) => bucket.push(coordinate))));
+            }
+
+            return bucket;
+        }
+
+        function buildProjection(features) {
+            const coordinates = features.flatMap((feature) => collectCoordinates(feature.geometry, []));
+            const xs = coordinates.map((coordinate) => coordinate[0]);
+            const ys = coordinates.map((coordinate) => coordinate[1]);
+            const minX = Math.min(...xs);
+            const maxX = Math.max(...xs);
+            const minY = Math.min(...ys);
+            const maxY = Math.max(...ys);
+            const dataWidth = Math.max(maxX - minX, 1e-9);
+            const dataHeight = Math.max(maxY - minY, 1e-9);
+            const usableWidth = mapDimensions.width - (mapDimensions.padding * 2);
+            const usableHeight = mapDimensions.height - (mapDimensions.padding * 2);
+            const scale = Math.min(usableWidth / dataWidth, usableHeight / dataHeight);
+            const offsetX = (mapDimensions.width - (dataWidth * scale)) / 2 - (minX * scale);
+            const offsetY = (mapDimensions.height - (dataHeight * scale)) / 2 + (maxY * scale);
+
+            return ([longitude, latitude]) => ({
+                x: (longitude * scale) + offsetX,
+                y: offsetY - (latitude * scale),
+            });
+        }
+
+        function ringToPath(ring, project) {
+            return ring.map((coordinate, index) => {
+                const point = project(coordinate);
+                return `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`;
+            }).join(' ') + ' Z';
+        }
+
+        function geometryToPath(geometry, project) {
+            if (!geometry || !geometry.coordinates) {
+                return '';
+            }
+
+            if (geometry.type === 'Polygon') {
+                return geometry.coordinates.map((ring) => ringToPath(ring, project)).join(' ');
+            }
+
+            if (geometry.type === 'MultiPolygon') {
+                return geometry.coordinates
+                    .map((polygon) => polygon.map((ring) => ringToPath(ring, project)).join(' '))
+                    .join(' ');
+            }
+
+            return '';
+        }
+
+        function geometryCentroid(geometry, project) {
+            const projectedPoints = collectCoordinates(geometry, []).map((coordinate) => project(coordinate));
+            const xs = projectedPoints.map((point) => point.x);
+            const ys = projectedPoints.map((point) => point.y);
+            return {
+                x: (Math.min(...xs) + Math.max(...xs)) / 2,
+                y: (Math.min(...ys) + Math.max(...ys)) / 2,
+            };
+        }
+
+        function geometryBounds(geometry, project) {
+            const projectedPoints = collectCoordinates(geometry, []).map((coordinate) => project(coordinate));
+            const xs = projectedPoints.map((point) => point.x);
+            const ys = projectedPoints.map((point) => point.y);
+            return {
+                minX: Math.min(...xs),
+                maxX: Math.max(...xs),
+                minY: Math.min(...ys),
+                maxY: Math.max(...ys),
+            };
+        }
+
+        function mergeBounds(boundsCollection) {
+            const validBounds = boundsCollection.filter(Boolean);
+            if (!validBounds.length) {
+                return null;
+            }
+
+            return validBounds.reduce((combined, bounds) => ({
+                minX: Math.min(combined.minX, bounds.minX),
+                maxX: Math.max(combined.maxX, bounds.maxX),
+                minY: Math.min(combined.minY, bounds.minY),
+                maxY: Math.max(combined.maxY, bounds.maxY),
+            }));
+        }
+
+        function pointBounds(point, radius = 0) {
+            return {
+                minX: point.x - radius,
+                maxX: point.x + radius,
+                minY: point.y - radius,
+                maxY: point.y + radius,
+            };
+        }
+
+        function clampBounds(bounds) {
+            return {
+                minX: Math.max(0, bounds.minX),
+                maxX: Math.min(mapDimensions.width, bounds.maxX),
+                minY: Math.max(0, bounds.minY),
+                maxY: Math.min(mapDimensions.height, bounds.maxY),
+            };
+        }
+
+        function mapViewBoxForSelection(pickupFeature, dropoffFeature) {
+            if (!pickupFeature || !dropoffFeature) {
+                return defaultMapViewBox;
+            }
+
+            const selectionBounds = mergeBounds([
+                pickupFeature.bounds,
+                dropoffFeature.bounds,
+                pointBounds(pickupFeature.centroid, 18),
+                pointBounds(dropoffFeature.centroid, 18),
+            ]);
+            const selectionWidth = Math.max(selectionBounds.maxX - selectionBounds.minX, 1);
+            const selectionHeight = Math.max(selectionBounds.maxY - selectionBounds.minY, 1);
+            const fullWidth = mapDimensions.width;
+            const fullHeight = mapDimensions.height;
+            const fullArea = fullWidth * fullHeight;
+            const selectionArea = selectionWidth * selectionHeight;
+
+            if (selectionArea >= fullArea * 0.58 && selectionWidth >= fullWidth * 0.78 && selectionHeight >= fullHeight * 0.78) {
+                return defaultMapViewBox;
+            }
+
+            const padding = Math.max(26, Math.min(72, Math.max(selectionWidth, selectionHeight) * 0.26));
+            const paddedBounds = clampBounds({
+                minX: selectionBounds.minX - padding,
+                maxX: selectionBounds.maxX + padding,
+                minY: selectionBounds.minY - padding,
+                maxY: selectionBounds.maxY + padding,
+            });
+            const minViewWidth = mapDimensions.width / 3.2;
+            const minViewHeight = mapDimensions.height / 3.2;
+            const centerX = (paddedBounds.minX + paddedBounds.maxX) / 2;
+            const centerY = (paddedBounds.minY + paddedBounds.maxY) / 2;
+            const targetWidth = Math.max(paddedBounds.maxX - paddedBounds.minX, minViewWidth);
+            const targetHeight = Math.max(paddedBounds.maxY - paddedBounds.minY, minViewHeight);
+            const centeredBounds = clampBounds({
+                minX: centerX - (targetWidth / 2),
+                maxX: centerX + (targetWidth / 2),
+                minY: centerY - (targetHeight / 2),
+                maxY: centerY + (targetHeight / 2),
+            });
+            const finalWidth = Math.max(centeredBounds.maxX - centeredBounds.minX, minViewWidth);
+            const finalHeight = Math.max(centeredBounds.maxY - centeredBounds.minY, minViewHeight);
+
+            return `${centeredBounds.minX.toFixed(2)} ${centeredBounds.minY.toFixed(2)} ${finalWidth.toFixed(2)} ${finalHeight.toFixed(2)}`;
+        }
+
+        function updateZoneCollections(nextZones) {
+            zones = [...nextZones].sort((left, right) => {
+                const boroughOrder = left.borough.localeCompare(right.borough);
+                if (boroughOrder !== 0) {
+                    return boroughOrder;
+                }
+                return left.label.localeCompare(right.label);
+            });
+            zoneMap = new Map(zones.map((zone) => [String(zone.id), zone]));
+        }
 
         function toApiDatetime(value) {
             return `${value.replace('T', ' ')}:00`;
         }
 
         function buildZoneOptions() {
+            const currentPickup = pickupSelect.value || '161';
+            const currentDropoff = dropoffSelect.value || '234';
             const options = zones.map((zone) => (
-                `<option value="${zone.id}">${zone.borough} [${zone.id}] · ${zone.label}</option>`
+                `<option value="${zone.id}">${escapeHtml(zone.borough)} [${zone.id}] · ${escapeHtml(zone.label)}</option>`
             )).join('');
             pickupSelect.innerHTML = options;
             dropoffSelect.innerHTML = options;
-            pickupSelect.value = '161';
-            dropoffSelect.value = '234';
+
+            pickupSelect.value = zoneMap.has(currentPickup) ? currentPickup : '161';
+            dropoffSelect.value = zoneMap.has(currentDropoff) ? currentDropoff : '234';
         }
 
-        function routePath(fromZone, toZone) {
-            const midX = (fromZone.x + toZone.x) / 2;
-            const midY = (fromZone.y + toZone.y) / 2;
-            const curveX = midX + (toZone.y - fromZone.y) * 0.16;
-            const curveY = midY - 34;
-            return `M ${fromZone.x} ${fromZone.y} Q ${curveX} ${curveY} ${toZone.x} ${toZone.y}`;
+        function syncActiveEstimateSelection(pickupId, dropoffId) {
+            activeEstimateSelection = {
+                pickupId: String(pickupId),
+                dropoffId: String(dropoffId),
+            };
+        }
+
+        function routePath(fromPoint, toPoint) {
+            const midX = (fromPoint.x + toPoint.x) / 2;
+            const midY = (fromPoint.y + toPoint.y) / 2;
+            const dx = toPoint.x - fromPoint.x;
+            const dy = toPoint.y - fromPoint.y;
+            const distance = Math.hypot(dx, dy) || 1;
+            const normalX = -dy / distance;
+            const normalY = dx / distance;
+            const bend = Math.min(42, Math.max(18, distance * 0.18));
+            const curveX = midX + (normalX * bend);
+            const curveY = midY + (normalY * bend);
+            return `M ${fromPoint.x.toFixed(2)} ${fromPoint.y.toFixed(2)} Q ${curveX.toFixed(2)} ${curveY.toFixed(2)} ${toPoint.x.toFixed(2)} ${toPoint.y.toFixed(2)}`;
         }
 
         function renderMap() {
-            const pickupZone = zoneMap.get(pickupSelect.value);
-            const dropoffZone = zoneMap.get(dropoffSelect.value);
+            const pickupZone = zoneMap.get(activeEstimateSelection.pickupId);
+            const dropoffZone = zoneMap.get(activeEstimateSelection.dropoffId);
 
-            zoneAreas.innerHTML = zones.map((zone) => {
+            if (!zoneFeaturesById.size) {
+                zoneAreas.innerHTML = '';
+                clearRoute();
+                return;
+            }
+
+            zoneAreas.innerHTML = Array.from(zoneFeaturesById.values()).map((zone) => {
                 let stateClass = '';
                 if (pickupZone && dropoffZone && pickupZone.id === zone.id && dropoffZone.id === zone.id) {
                     stateClass = 'both';
@@ -763,36 +1134,90 @@
                 } else if (dropoffZone && dropoffZone.id === zone.id) {
                     stateClass = 'dropoff';
                 }
-                return `<path class="zone-area ${stateClass}" d="${zone.area}"></path>`;
+                return `<path class="zone-area ${stateClass}" d="${zone.path}" data-zone-id="${zone.id}"></path>`;
             }).join('');
 
-            zoneNodes.innerHTML = zones.map((zone) => {
-                let stateClass = '';
-                if (pickupZone && dropoffZone && pickupZone.id === zone.id && dropoffZone.id === zone.id) {
-                    stateClass = 'both';
-                } else if (pickupZone && pickupZone.id === zone.id) {
-                    stateClass = 'pickup';
-                } else if (dropoffZone && dropoffZone.id === zone.id) {
-                    stateClass = 'dropoff';
-                }
-                return `
-                    <g class="zone-node ${stateClass}">
-                        <circle cx="${zone.x}" cy="${zone.y}" r="9"></circle>
-                        <text x="${zone.x + 12}" y="${zone.y + 3}">${zone.id}</text>
-                    </g>`;
-            }).join('');
+            const pickupFeature = zoneFeaturesById.get(activeEstimateSelection.pickupId);
+            const dropoffFeature = zoneFeaturesById.get(activeEstimateSelection.dropoffId);
 
-            if (pickupZone && dropoffZone) {
-                const path = routePath(pickupZone, dropoffZone);
-                routeShadow.setAttribute('d', path);
+            animateMapViewBox(mapViewBoxForSelection(pickupFeature, dropoffFeature), 1250);
+
+            if (pickupFeature && dropoffFeature && pickupFeature.id !== dropoffFeature.id) {
+                const path = routePath(pickupFeature.centroid, dropoffFeature.centroid);
+                routeAura.setAttribute('d', path);
                 routeLine.setAttribute('d', path);
-                routeShadow.classList.add('active');
+                routeAura.classList.add('active');
                 routeLine.classList.add('active');
+                routeAura.classList.add('flowing');
+                routeLine.classList.add('flowing');
             } else {
-                routeShadow.setAttribute('d', '');
-                routeLine.setAttribute('d', '');
-                routeShadow.classList.remove('active');
-                routeLine.classList.remove('active');
+                clearRoute();
+            }
+        }
+
+        async function loadZoneGeometry() {
+            mapStatus.textContent = 'Loading official TLC taxi zone boundaries...';
+            mapStatus.classList.remove('error');
+
+            try {
+                if (!window.shp) {
+                    throw new Error('Shapefile parser failed to load.');
+                }
+
+                const source = await window.shp(taxiZoneDataUrl);
+                const features = flattenCollections(source).filter((feature) => (
+                    feature && feature.geometry && (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon')
+                ));
+
+                if (!features.length) {
+                    throw new Error('The official taxi zone file did not return any polygon features.');
+                }
+
+                const project = buildProjection(features);
+                const derivedZones = [];
+                zoneFeaturesById = new Map();
+
+                features.forEach((feature) => {
+                    const properties = normalizeProperties(feature.properties);
+                    const locationId = Number(getZoneProperty(properties, ['locationid', 'location_id', 'objectid']));
+                    const label = getZoneProperty(properties, ['zone', 'zone_name', 'name']);
+                    const borough = getZoneProperty(properties, ['borough', 'boro_name']) || 'Unknown';
+
+                    if (!Number.isFinite(locationId) || !label) {
+                        return;
+                    }
+
+                    const path = geometryToPath(feature.geometry, project);
+                    if (!path) {
+                        return;
+                    }
+
+                    const zone = {
+                        id: locationId,
+                        borough: String(borough),
+                        label: String(label),
+                        path,
+                        centroid: geometryCentroid(feature.geometry, project),
+                        bounds: geometryBounds(feature.geometry, project),
+                    };
+
+                    derivedZones.push({ id: zone.id, borough: zone.borough, label: zone.label });
+                    zoneFeaturesById.set(String(zone.id), zone);
+                });
+
+                if (!zoneFeaturesById.size) {
+                    throw new Error('The official taxi zone file did not expose usable location identifiers.');
+                }
+
+                updateZoneCollections(derivedZones);
+                buildZoneOptions();
+                renderMap();
+                mapStatus.textContent = `Official TLC taxi zone boundaries loaded from ${taxiZoneDataUrl}.`;
+            } catch (error) {
+                zoneFeaturesById = new Map();
+                renderMap();
+                mapStatus.textContent = error.message;
+                mapStatus.classList.add('error');
             }
         }
 
@@ -807,10 +1232,9 @@
         }
 
         buildZoneOptions();
+        syncActiveEstimateSelection(pickupSelect.value, dropoffSelect.value);
         renderMap();
-
-        pickupSelect.addEventListener('change', renderMap);
-        dropoffSelect.addEventListener('change', renderMap);
+        loadZoneGeometry();
 
         document.getElementById('reset-form').addEventListener('click', () => {
             form.reset();
@@ -822,6 +1246,7 @@
             document.getElementById('rate_code_id').value = '1';
             statusEl.textContent = '';
             statusEl.classList.remove('error');
+            syncActiveEstimateSelection(pickupSelect.value, dropoffSelect.value);
             renderMap();
         });
 
@@ -839,6 +1264,7 @@
                 rate_code_id: Number(document.getElementById('rate_code_id').value),
             };
 
+            syncActiveEstimateSelection(payload.pickup_zone_id, payload.dropoff_zone_id);
             renderMap();
 
             try {
