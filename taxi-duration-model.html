@@ -320,11 +320,6 @@
             border-color: #dd9c2d;
         }
 
-        .route-swatch {
-            width: 18px;
-            background: linear-gradient(90deg, #ff8fbd, #ffd37a);
-        }
-
         .map-shell {
             width: 100%;
         }
@@ -389,19 +384,19 @@
 
         .route-aura {
             fill: none;
-            stroke: rgba(255, 143, 189, 0.28);
-            stroke-width: 1.15px;
+            stroke: rgba(255, 92, 190, 0.7);
+            stroke-width: 5px;
             stroke-linecap: round;
             stroke-linejoin: round;
             opacity: 0;
-            filter: blur(0.4px);
+            filter: url(#electric-glow);
             transition: opacity 0.2s ease;
         }
 
         .route-base {
             fill: none;
-            stroke: rgba(255, 162, 198, 0.28);
-            stroke-width: 0.72px;
+            stroke: rgba(255, 111, 195, 0.48);
+            stroke-width: 2.1px;
             stroke-linecap: round;
             stroke-linejoin: round;
             opacity: 0;
@@ -411,10 +406,10 @@
         .route-pulse {
             fill: none;
             stroke: url(#route-flow-gradient);
-            stroke-width: 1.05px;
+            stroke-width: 1.15px;
             stroke-linecap: round;
             stroke-linejoin: round;
-            stroke-dasharray: 34 180;
+            stroke-dasharray: 3 5 18 4;
             opacity: 0;
             transition: opacity 0.2s ease;
         }
@@ -426,19 +421,19 @@
         }
 
         .route-aura.base-visible {
-            opacity: 0.42;
+            opacity: 0.34;
         }
 
         .route-base.base-visible {
-            opacity: 0.16;
+            opacity: 0.72;
         }
 
         .route-pulse.flowing {
-            animation: route-pulse 1.95s linear infinite;
+            animation: route-pulse 0.62s steps(2, end) infinite;
         }
 
         .route-aura.flowing {
-            animation: route-aura-pulse 1.95s ease-in-out infinite;
+            animation: route-aura-pulse 0.19s steps(2, end) infinite;
         }
 
         @keyframes pickup-heartbeat {
@@ -495,71 +490,27 @@
         @keyframes route-pulse {
             0% {
                 stroke-dashoffset: 0;
-                opacity: 0.12;
-                filter: drop-shadow(0 0 0 rgba(255, 143, 189, 0));
+                opacity: 0.72;
+                filter: drop-shadow(0 0 1px #fff);
             }
 
-            8% {
+            18% {
                 opacity: 1;
-                filter: drop-shadow(0 0 2px rgba(255, 143, 189, 0.45));
-            }
-
-            36% {
-                stroke-dashoffset: -178;
-                opacity: 0.92;
-                filter: drop-shadow(0 0 2px rgba(255, 211, 122, 0.34));
-            }
-
-            44% {
-                stroke-dashoffset: -178;
-                opacity: 0.06;
-                filter: drop-shadow(0 0 0 rgba(255, 211, 122, 0));
-            }
-
-            56% {
-                stroke-dashoffset: 0;
-                opacity: 0.12;
-                filter: drop-shadow(0 0 0 rgba(255, 143, 189, 0));
-            }
-
-            64% {
-                opacity: 0.96;
-                filter: drop-shadow(0 0 2px rgba(255, 143, 189, 0.42));
-            }
-
-            92% {
-                stroke-dashoffset: -178;
-                opacity: 0.88;
-                filter: drop-shadow(0 0 2px rgba(255, 211, 122, 0.3));
+                filter: drop-shadow(0 0 3px rgba(255, 110, 210, 0.9));
             }
 
             100% {
-                stroke-dashoffset: -178;
-                opacity: 0;
-                filter: drop-shadow(0 0 0 rgba(255, 211, 122, 0));
+                stroke-dashoffset: -30;
+                opacity: 0.82;
+                filter: drop-shadow(0 0 2px rgba(255, 211, 122, 0.75));
             }
         }
 
         @keyframes route-aura-pulse {
-            0%, 100% {
-                stroke: rgba(255, 143, 189, 0.14);
-                opacity: 0.14;
-            }
-
-            8%, 64% {
-                stroke: rgba(255, 143, 189, 0.34);
-                opacity: 0.34;
-            }
-
-            36%, 92% {
-                stroke: rgba(255, 211, 122, 0.24);
-                opacity: 0.22;
-            }
-
-            44%, 100% {
-                stroke: rgba(255, 143, 189, 0.08);
-                opacity: 0.08;
-            }
+            0%, 100% { opacity: 0.18; }
+            35% { opacity: 0.48; }
+            52% { opacity: 0.12; }
+            68% { opacity: 0.4; }
         }
 
         .error {
@@ -677,7 +628,7 @@
 
     <main>
         <h2>NYC taxi duration estimator</h2>
-        <p class="intro">This page calls a live model deployed on Google Cloud Run. Choose pickup and dropoff zones through readable borough labels, then see the selected route sketched on the map beside the estimate.</p>
+        <p class="intro">This page calls a live model deployed on Google Cloud Run. Choose pickup and dropoff zones through readable borough labels, then see the selected zones connected on the map beside the estimate.</p>
 
         <div class="model-layout">
             <div class="left-column">
@@ -771,7 +722,6 @@
                     <div class="legend">
                         <span><i class="swatch pickup-swatch"></i>Pickup</span>
                         <span><i class="swatch dropoff-swatch"></i>Dropoff</span>
-                        <span><i class="swatch route-swatch"></i>Route</span>
                     </div>
                     <div class="map-shell">
                         <svg id="taxi-map" viewBox="0 0 500 620" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Map of official New York City taxi zones with highlighted pickup and dropoff polygons">
@@ -781,9 +731,17 @@
                                     <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
                                 </filter>
                                 <linearGradient id="route-flow-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stop-color="#ff8fbd"></stop>
+                                    <stop offset="0%" stop-color="#fff"></stop>
+                                    <stop offset="30%" stop-color="#ff8fbd"></stop>
                                     <stop offset="100%" stop-color="#ffd37a"></stop>
                                 </linearGradient>
+                                <filter id="electric-glow" x="-60%" y="-60%" width="220%" height="220%">
+                                    <feGaussianBlur stdDeviation="2.8" result="blur"></feGaussianBlur>
+                                    <feMerge>
+                                        <feMergeNode in="blur"></feMergeNode>
+                                        <feMergeNode in="SourceGraphic"></feMergeNode>
+                                    </feMerge>
+                                </filter>
                             </defs>
                             <g id="zone-areas"></g>
                             <g id="route-overlay">
@@ -1158,17 +1116,31 @@
         }
 
         function routePath(fromPoint, toPoint) {
-            const midX = (fromPoint.x + toPoint.x) / 2;
-            const midY = (fromPoint.y + toPoint.y) / 2;
             const dx = toPoint.x - fromPoint.x;
             const dy = toPoint.y - fromPoint.y;
             const distance = Math.hypot(dx, dy) || 1;
             const normalX = -dy / distance;
             const normalY = dx / distance;
-            const bend = Math.min(42, Math.max(18, distance * 0.18));
-            const curveX = midX + (normalX * bend);
-            const curveY = midY + (normalY * bend);
-            return `M ${fromPoint.x.toFixed(2)} ${fromPoint.y.toFixed(2)} Q ${curveX.toFixed(2)} ${curveY.toFixed(2)} ${toPoint.x.toFixed(2)} ${toPoint.y.toFixed(2)}`;
+            const segments = Math.max(9, Math.min(22, Math.round(distance / 15)));
+            const amplitude = Math.min(13, Math.max(5, distance * 0.045));
+            let seed = Math.round(fromPoint.x * 31 + fromPoint.y * 17 + toPoint.x * 13 + toPoint.y * 7);
+            const random = () => {
+                seed = (seed * 1664525 + 1013904223) >>> 0;
+                return seed / 4294967296;
+            };
+            const points = [`M ${fromPoint.x.toFixed(2)} ${fromPoint.y.toFixed(2)}`];
+
+            for (let index = 1; index < segments; index += 1) {
+                const progress = index / segments;
+                const taper = Math.sin(progress * Math.PI);
+                const jitter = (random() - 0.5) * 2 * amplitude * taper;
+                const x = fromPoint.x + (dx * progress) + (normalX * jitter);
+                const y = fromPoint.y + (dy * progress) + (normalY * jitter);
+                points.push(`L ${x.toFixed(2)} ${y.toFixed(2)}`);
+            }
+
+            points.push(`L ${toPoint.x.toFixed(2)} ${toPoint.y.toFixed(2)}`);
+            return points.join(' ');
         }
 
         function renderMap() {
